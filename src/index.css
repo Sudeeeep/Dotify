@@ -10,3 +10,14 @@
 * {
   font-family: "Spotify";
 }
+
+body {
+  height: 100vh;
+  color: white;
+  background: linear-gradient(
+    180deg,
+    rgba(57, 57, 57, 1) 24%,
+    rgba(0, 0, 0, 1) 100%
+  );
+  background-repeat: no-repeat;
+}
