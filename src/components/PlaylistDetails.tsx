@@ -69,7 +69,7 @@ export const PlaylistDetails = () => {
               uri: item.track.uri,
               album: item.track.album.name,
               albumImage: item.track.album.images[0]?.url,
-              dateAdded: item.added_at,
+              dateAdded: changeDateFormat(new Date(item.added_at).toString()),
               duration: msConvert(item.track.duration_ms),
               artists: item.track.album.artists.map(
                 ({
@@ -101,6 +101,13 @@ export const PlaylistDetails = () => {
     return seconds == 60
       ? minutes + 1 + ":00"
       : minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+  }
+
+  function changeDateFormat(date: string) {
+    const day = date.slice(8, 10);
+    const month = date.slice(4, 7);
+    const year = date.slice(11, 15);
+    return `${day} ${month} ${year}`;
   }
 
   if (selectedPlaylistDetails) {
@@ -139,7 +146,7 @@ export const PlaylistDetails = () => {
 
             {/* Tracks in the selected playlist*/}
             <div className="flex flex-col p-6 text-[#858383]">
-              <div className="grid grid-cols-[1rem_1fr_1fr_6rem_6rem] gap-4 px-4 border-b">
+              <div className="grid grid-cols-[1rem_1fr_1fr_8rem_6rem] gap-4 px-4 border-b">
                 <div>#</div>
                 <div>Title</div>
                 <div>Album</div>
@@ -150,7 +157,7 @@ export const PlaylistDetails = () => {
                 tracks.map((track, index) => (
                   <div
                     key={index}
-                    className="grid grid-cols-[1rem_1fr_1fr_6rem_6rem] gap-4 p-4 hover:opacity-80 hover:bg-[#2d2d2d]"
+                    className="grid grid-cols-[1rem_1fr_1fr_8rem_6rem] gap-4 p-4 hover:opacity-80 hover:bg-[#2d2d2d]"
                   >
                     <div>{index + 1}</div>
                     <div className="flex gap-4">
