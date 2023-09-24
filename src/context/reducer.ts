@@ -4,19 +4,49 @@ export type PlaylistsType = {
   url: string;
 };
 
+export type SelectedPlaylistDetails = PlaylistsType & {
+  description: string;
+  followers: number;
+  ownerName: string;
+  total: number;
+};
+
+export type Tracks = {
+  id: string;
+  trackName: string;
+  uri: string;
+  album: string;
+  albumImage: string;
+  dateAdded: string;
+  duration: number;
+  artists: [{ id: string; name: string; uri: string }];
+};
+
 export type InitialStateType = {
   token: string | null;
   playlists: PlaylistsType[] | null;
+  selectedPlaylistId: string | null;
+  selectedPlaylistDetails: SelectedPlaylistDetails | null;
+  tracks: Tracks[];
+  trackOffset: number;
 };
 
-export type ActionType = {
-  type: string;
-  payload: string | PlaylistsType[];
-};
+export type ActionType =
+  | { type: "SET_TOKEN"; payload: string }
+  | { type: "SET_PLAYLISTS"; payload: PlaylistsType[] }
+  | { type: "SET_SELECTED_PLAYLIST"; payload: string }
+  | { type: "SET_SELECTED_PLAYLIST_DETAILS"; payload: SelectedPlaylistDetails }
+  | { type: "SET_TRACKS"; payload: Tracks[] }
+  | { type: "RESET_TRACKS" }
+  | { type: "SET_TRACK_OFFSET"; payload: number };
 
 export const initialState: InitialStateType = {
   token: null,
   playlists: null,
+  selectedPlaylistId: null,
+  selectedPlaylistDetails: null,
+  tracks: [],
+  trackOffset: 0,
 };
 
 export const stateReducer = (
@@ -25,22 +55,47 @@ export const stateReducer = (
 ): InitialStateType => {
   switch (action.type) {
     case "SET_TOKEN":
-      if (typeof action.payload === "string") {
-        return {
-          ...initialState,
-          token: action.payload,
-        };
-      }
-      return initialState;
+      return {
+        ...initialState,
+        token: action.payload,
+      };
 
     case "SET_PLAYLISTS":
-      if (typeof action.payload === "object") {
-        return {
-          ...initialState,
-          playlists: action.payload,
-        };
-      }
-      return initialState;
+      return {
+        ...initialState,
+        playlists: action.payload,
+      };
+
+    case "SET_SELECTED_PLAYLIST":
+      return {
+        ...initialState,
+        selectedPlaylistId: action.payload,
+      };
+
+    case "SET_SELECTED_PLAYLIST_DETAILS":
+      return {
+        ...initialState,
+        selectedPlaylistDetails: action.payload,
+      };
+
+    case "SET_TRACKS": {
+      return {
+        ...initialState,
+        tracks: initialState.tracks.concat(action.payload),
+      };
+    }
+
+    case "RESET_TRACKS":
+      return {
+        ...initialState,
+        tracks: [],
+      };
+
+    case "SET_TRACK_OFFSET":
+      return {
+        ...initialState,
+        trackOffset: action.payload,
+      };
 
     default:
       return initialState;

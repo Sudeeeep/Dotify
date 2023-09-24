@@ -28,7 +28,6 @@ export const Playlists = () => {
             name: string;
             id: string;
           }) => {
-            console.log(url);
             return { url, id, name };
           }
         );
@@ -44,10 +43,15 @@ export const Playlists = () => {
       </div>
       <div className="flex flex-col gap-1 max-h-full h-[60vh] overflow-auto">
         {playlists &&
-          playlists.map(({ name, url }, index) => (
+          playlists.map(({ id, name, url }, index) => (
             <div
               key={index}
               className="flex gap-2 cursor-pointer p-2 hover:bg-[#2d2d2d]"
+              onClick={() => {
+                dispatch({ type: "SET_SELECTED_PLAYLIST", payload: `${id}` });
+                dispatch({ type: "RESET_TRACKS" });
+                dispatch({ type: "SET_TRACK_OFFSET", payload: 0 });
+              }}
             >
               <img src={url} alt={name} className="w-10 h-10" />
               <p>{name}</p>

@@ -1,3 +1,11 @@
+import { useContext } from "react";
+import { PlaylistDetails } from "./PlaylistDetails";
+import { StateContext } from "../context/StateContext";
+
 export const MainScreen = () => {
-  return <div className="col-span-3">MainScreen</div>;
+  const {
+    state: { selectedPlaylistId },
+  } = useContext(StateContext);
+
+  return selectedPlaylistId && <PlaylistDetails />;
 };
