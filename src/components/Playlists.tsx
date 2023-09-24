@@ -6,7 +6,7 @@ import { PlaylistsType } from "../context/reducer";
 
 export const Playlists = () => {
   const {
-    state: { token, playlists },
+    state: { token, playlists, selectedPlaylistId },
     dispatch,
   } = useContext(StateContext);
 
@@ -48,9 +48,13 @@ export const Playlists = () => {
               key={index}
               className="flex gap-2 cursor-pointer p-2 hover:bg-[#2d2d2d]"
               onClick={() => {
-                dispatch({ type: "SET_SELECTED_PLAYLIST", payload: `${id}` });
-                dispatch({ type: "RESET_TRACKS" });
-                dispatch({ type: "SET_TRACK_OFFSET", payload: 0 });
+                console.log(selectedPlaylistId);
+                console.log(id);
+                if (selectedPlaylistId !== id) {
+                  dispatch({ type: "SET_SELECTED_PLAYLIST", payload: `${id}` });
+                  dispatch({ type: "RESET_TRACKS" });
+                  dispatch({ type: "SET_TRACK_OFFSET", payload: 0 });
+                }
               }}
             >
               <img src={url} alt={name} className="w-10 h-10" />
