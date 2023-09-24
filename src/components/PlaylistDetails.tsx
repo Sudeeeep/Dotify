@@ -110,7 +110,7 @@ export const PlaylistDetails = () => {
     return `${day} ${month} ${year}`;
   }
 
-  if (selectedPlaylistDetails) {
+  if (selectedPlaylistDetails && tracks.length !== 0) {
     return (
       <div className="col-span-3 overflow-hidden">
         <div className="h-[80vh] max-h-full overflow-auto">
