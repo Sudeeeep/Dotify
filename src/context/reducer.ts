@@ -1,3 +1,5 @@
+import { User } from "../components/User";
+
 export type PlaylistsType = {
   name: string;
   id: string;
@@ -22,6 +24,13 @@ export type Tracks = {
   artists: [{ id: string; name: string; uri: string }];
 };
 
+export type User = {
+  id: string;
+  name: string;
+  country: string;
+  imageUrl: string;
+};
+
 export type InitialStateType = {
   token: string | null;
   playlists: PlaylistsType[] | null;
@@ -29,16 +38,18 @@ export type InitialStateType = {
   selectedPlaylistDetails: SelectedPlaylistDetails | null;
   tracks: Tracks[];
   trackOffset: number;
+  user: User | null;
 };
 
 export type ActionType =
-  | { type: "SET_TOKEN"; payload: string }
+  | { type: "SET_TOKEN"; payload: string | null }
   | { type: "SET_PLAYLISTS"; payload: PlaylistsType[] }
   | { type: "SET_SELECTED_PLAYLIST"; payload: string }
   | { type: "SET_SELECTED_PLAYLIST_DETAILS"; payload: SelectedPlaylistDetails }
   | { type: "SET_TRACKS"; payload: Tracks[] }
   | { type: "RESET_TRACKS" }
-  | { type: "SET_TRACK_OFFSET"; payload: number };
+  | { type: "SET_TRACK_OFFSET"; payload: number }
+  | { type: "SET_USER"; payload: User };
 
 export const initialState: InitialStateType = {
   token: null,
@@ -47,6 +58,7 @@ export const initialState: InitialStateType = {
   selectedPlaylistDetails: null,
   tracks: [],
   trackOffset: 0,
+  user: null,
 };
 
 export const stateReducer = (
@@ -95,6 +107,12 @@ export const stateReducer = (
       return {
         ...initialState,
         trackOffset: action.payload,
+      };
+
+    case "SET_USER":
+      return {
+        ...initialState,
+        user: action.payload,
       };
 
     default:
