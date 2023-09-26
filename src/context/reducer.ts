@@ -1,25 +1,19 @@
-import { User } from "../components/User";
-
 export type PlaylistsType = {
   name: string;
   id: string;
   url: string;
+  description: string;
 };
 
 export type SelectedPlaylistDetails = PlaylistsType & {
-  description: string;
   followers: number;
   ownerName: string;
   total: number;
 };
 
-type FeaturedPlaylistsDetails = PlaylistsType & {
-  description: string;
-};
-
 export type FeaturedPlaylists = {
   message: string;
-  playlists: FeaturedPlaylistsDetails[];
+  playlists: PlaylistsType[];
 };
 
 export type Tracks = {

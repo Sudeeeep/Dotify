@@ -23,12 +23,14 @@ export const Playlists = () => {
             images: [{ url }],
             name,
             id,
+            description,
           }: {
             images: [{ height: number; url: string; width: number }];
             name: string;
             id: string;
+            description: string;
           }) => {
-            return { url, id, name };
+            return { url, id, name, description };
           }
         );
         dispatch({ type: "SET_PLAYLISTS", payload: userPlaylists });
