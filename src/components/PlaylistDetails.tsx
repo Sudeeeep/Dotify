@@ -113,7 +113,7 @@ export const PlaylistDetails = () => {
   if (selectedPlaylistDetails && tracks.length !== 0) {
     return (
       <div className="col-span-3 overflow-hidden">
-        <div className="h-[80vh] max-h-full overflow-auto">
+        <div className="h-[75vh] max-h-full overflow-auto">
           {/* Playlist Header */}
           <div className="flex gap-4 items-end m-6">
             <img
