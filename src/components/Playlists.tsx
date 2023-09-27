@@ -3,6 +3,7 @@ import { BiSolidPlaylist } from "react-icons/bi";
 import { StateContext } from "../context/StateContext";
 import axios from "axios";
 import { PlaylistsType } from "../context/reducer";
+import { Link } from "react-router-dom";
 
 export const Playlists = () => {
   const {
@@ -46,22 +47,24 @@ export const Playlists = () => {
       <div className="flex flex-col gap-1 max-h-full h-[60vh] overflow-auto">
         {playlists &&
           playlists.map(({ id, name, url }, index) => (
-            <div
-              key={index}
-              className="flex gap-2 cursor-pointer p-2 hover:bg-[#2d2d2d]"
-              onClick={() => {
-                console.log(selectedPlaylistId);
-                console.log(id);
-                if (selectedPlaylistId !== id) {
-                  dispatch({ type: "SET_SELECTED_PLAYLIST", payload: `${id}` });
-                  dispatch({ type: "RESET_TRACKS" });
-                  dispatch({ type: "SET_TRACK_OFFSET", payload: 0 });
-                }
-              }}
-            >
-              <img src={url} alt={name} className="w-10 h-10" />
-              <p>{name}</p>
-            </div>
+            <Link to={`/playlist/${id}`} key={index}>
+              <div
+                className="flex gap-2 cursor-pointer p-2 hover:bg-[#2d2d2d]"
+                onClick={() => {
+                  if (selectedPlaylistId !== id) {
+                    dispatch({
+                      type: "SET_SELECTED_PLAYLIST",
+                      payload: `${id}`,
+                    });
+                    dispatch({ type: "RESET_TRACKS" });
+                    dispatch({ type: "SET_TRACK_OFFSET", payload: 0 });
+                  }
+                }}
+              >
+                <img src={url} alt={name} className="w-10 h-10" />
+                <p>{name}</p>
+              </div>
+            </Link>
           ))}
       </div>
     </div>

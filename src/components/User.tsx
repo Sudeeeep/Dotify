@@ -1,36 +1,15 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { RiUser3Line } from "react-icons/ri";
 import { StateContext } from "../context/StateContext";
-import axios from "axios";
 import dotifyLogo from "../assets/images/spotify-2.svg";
 
 export const User = () => {
   const {
-    state: { token, user },
+    state: { user },
     dispatch,
   } = useContext(StateContext);
 
   const [menuVisible, setMenuVisible] = useState(false);
-
-  useEffect(() => {
-    axios
-      .get(`https://api.spotify.com/v1/me`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then(({ data }) => {
-        dispatch({
-          type: "SET_USER",
-          payload: {
-            name: data.display_name,
-            id: data.id,
-            country: data.country,
-            imageUrl: data.images[0]?.url,
-          },
-        });
-      });
-  }, []);
 
   return (
     <div className="pt-2 p-4">

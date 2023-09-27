@@ -2,6 +2,8 @@ import { useContext, useEffect } from "react";
 import { StateContext } from "../context/StateContext";
 import axios from "axios";
 import { AiFillPlayCircle } from "react-icons/ai";
+import { useParams } from "react-router-dom";
+import { User } from "./User";
 
 export const PlaylistDetails = () => {
   const {
@@ -15,11 +17,24 @@ export const PlaylistDetails = () => {
     dispatch,
   } = useContext(StateContext);
 
+  const playlistId = useParams().playlistId;
+
+  // console.log(selectedPlaylistId);
+
   //fetch selected playlist details
   useEffect(() => {
+    if (playlistId) {
+      dispatch({
+        type: "SET_SELECTED_PLAYLIST",
+        payload: `${playlistId}`,
+      });
+      dispatch({ type: "RESET_TRACKS" });
+      dispatch({ type: "SET_TRACK_OFFSET", payload: 0 });
+    }
+
     if (selectedPlaylistId) {
       axios
-        .get(`https://api.spotify.com/v1/playlists/${selectedPlaylistId}`, {
+        .get(`https://api.spotify.com/v1/playlists/${playlistId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -42,7 +57,7 @@ export const PlaylistDetails = () => {
           });
         });
     }
-  }, [selectedPlaylistId]);
+  }, [selectedPlaylistId, playlistId]);
 
   //fetch the tracks in the selected playlist
   useEffect(() => {
@@ -86,7 +101,7 @@ export const PlaylistDetails = () => {
               ),
             };
           });
-          console.log(fetchedtracks);
+          // console.log(fetchedtracks);
           dispatch({ type: "SET_TRACKS", payload: fetchedtracks });
         });
     }
@@ -113,6 +128,7 @@ export const PlaylistDetails = () => {
   if (selectedPlaylistDetails && tracks.length !== 0) {
     return (
       <div className="col-span-3 overflow-hidden">
+        <User />
         <div className="h-[75vh] max-h-full overflow-auto">
           {/* Playlist Header */}
           <div className="flex gap-4 items-end m-6">

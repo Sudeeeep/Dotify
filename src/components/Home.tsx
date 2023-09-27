@@ -3,6 +3,8 @@ import { useContext, useEffect } from "react";
 import { StateContext } from "../context/StateContext";
 import { FeaturedPlaylists } from "../context/reducer";
 import { RiPlayFill } from "react-icons/ri";
+import { User } from "./User";
+import { Link } from "react-router-dom";
 
 export const Home = () => {
   const {
@@ -55,9 +57,13 @@ export const Home = () => {
     }
   }, [user?.country]);
 
+  console.log("Hello");
+  console.log(featuredPlaylist);
+
   if (featuredPlaylist && playlists) {
     return (
-      <div className="overflow-hidden">
+      <div className="overflow-hidden col-span-3">
+        <User />
         <div className="h-[75vh] p-8 overflow-auto">
           {/* Featured Playlists */}
           <div className="flex justify-between mb-4">
@@ -66,35 +72,39 @@ export const Home = () => {
           </div>
           <div className="grid grid-cols-4 gap-6">
             {featuredPlaylist?.playlists.slice(0, 8).map((item, index) => (
-              <div
-                key={index}
-                className="py-6 rounded-lg bg-[#121212] hover:bg-[#2d2d2d] cursor-pointer"
-                onClick={() =>
-                  dispatch({
-                    type: "SET_SELECTED_PLAYLIST",
-                    payload: `${item.id}`,
-                  })
-                }
-              >
-                <div className="flex flex-col gap-4 items-center">
-                  <div className="relative">
-                    <img
-                      src={item.url}
-                      alt={item.name}
-                      className="w-44 h-44 rounded-lg"
-                    />
-                    <div className="absolute bottom-0 right-0 text-[black] bg-[#1ED760] p-2 m-1 rounded-full cursor-pointer hover:scale-105">
-                      <RiPlayFill className="w-8 h-8" />
+              <Link to={`/playlist/${item.id}`} key={index}>
+                <div
+                  key={index}
+                  className="py-6 rounded-lg bg-[#121212] hover:bg-[#2d2d2d] cursor-pointer"
+                  onClick={() => {
+                    dispatch({
+                      type: "SET_SELECTED_PLAYLIST",
+                      payload: `${item.id}`,
+                    });
+                    dispatch({ type: "RESET_TRACKS" });
+                    dispatch({ type: "SET_TRACK_OFFSET", payload: 0 });
+                  }}
+                >
+                  <div className="flex flex-col gap-4 items-center">
+                    <div className="relative">
+                      <img
+                        src={item.url}
+                        alt={item.name}
+                        className="w-44 h-44 rounded-lg"
+                      />
+                      <div className="absolute bottom-0 right-0 text-[black] bg-[#1ED760] p-2 m-1 rounded-full cursor-pointer hover:scale-105">
+                        <RiPlayFill className="w-8 h-8" />
+                      </div>
+                    </div>
+                    <div className="w-44 flex flex-col gap-1 ">
+                      <p className="text-lg">{item.name}</p>
+                      <p className="line-clamp-2 text-xs text-[#858383]">
+                        {item.description}
+                      </p>
                     </div>
                   </div>
-                  <div className="w-44 flex flex-col gap-1 ">
-                    <p className="text-lg">{item.name}</p>
-                    <p className="line-clamp-2 text-xs text-[#858383]">
-                      {item.description}
-                    </p>
-                  </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
 
@@ -105,35 +115,39 @@ export const Home = () => {
           </div>
           <div className="grid grid-cols-4 gap-6">
             {playlists?.slice(0, 8).map((item, index) => (
-              <div
-                key={index}
-                className="py-6 rounded-lg bg-[#121212] hover:bg-[#2d2d2d] cursor-pointer"
-                onClick={() =>
-                  dispatch({
-                    type: "SET_SELECTED_PLAYLIST",
-                    payload: `${item.id}`,
-                  })
-                }
-              >
-                <div className="flex flex-col gap-4 items-center">
-                  <div className="relative">
-                    <img
-                      src={item.url}
-                      alt={item.name}
-                      className="w-44 h-44 rounded-lg"
-                    />
-                    <div className="absolute bottom-0 right-0 text-[black] bg-[#1ED760] p-2 m-1 rounded-full cursor-pointer hover:scale-105">
-                      <RiPlayFill className="w-8 h-8" />
+              <Link to={`/playlist/${item.id}`} key={index}>
+                <div
+                  key={index}
+                  className="py-6 rounded-lg bg-[#121212] hover:bg-[#2d2d2d] cursor-pointer"
+                  onClick={() => {
+                    dispatch({
+                      type: "SET_SELECTED_PLAYLIST",
+                      payload: `${item.id}`,
+                    });
+                    dispatch({ type: "RESET_TRACKS" });
+                    dispatch({ type: "SET_TRACK_OFFSET", payload: 0 });
+                  }}
+                >
+                  <div className="flex flex-col gap-4 items-center">
+                    <div className="relative">
+                      <img
+                        src={item.url}
+                        alt={item.name}
+                        className="w-44 h-44 rounded-lg"
+                      />
+                      <div className="absolute bottom-0 right-0 text-[black] bg-[#1ED760] p-2 m-1 rounded-full cursor-pointer hover:scale-105">
+                        <RiPlayFill className="w-8 h-8" />
+                      </div>
+                    </div>
+                    <div className="w-44 flex flex-col gap-1">
+                      <p className="text-lg">{item.name}</p>
+                      <p className="line-clamp-2 text-xs text-[#858383]">
+                        {item.description}
+                      </p>
                     </div>
                   </div>
-                  <div className="w-44 flex flex-col gap-1">
-                    <p className="text-lg">{item.name}</p>
-                    <p className="line-clamp-2 text-xs text-[#858383]">
-                      {item.description}
-                    </p>
-                  </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
