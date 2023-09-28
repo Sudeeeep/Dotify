@@ -34,6 +34,12 @@ export type User = {
   imageUrl: string;
 };
 
+export type Artists = {
+  artistId: string;
+  artistName: string;
+  artistImg: string;
+};
+
 export type InitialStateType = {
   token: string | null;
   playlists: PlaylistsType[] | null;
@@ -43,6 +49,7 @@ export type InitialStateType = {
   trackOffset: number;
   user: User | null;
   featuredPlaylist: FeaturedPlaylists | null;
+  favouriteArtists: Artists[] | null;
 };
 
 export type ActionType =
@@ -54,7 +61,8 @@ export type ActionType =
   | { type: "RESET_TRACKS" }
   | { type: "SET_TRACK_OFFSET"; payload: number }
   | { type: "SET_USER"; payload: User }
-  | { type: "SET_FEATURED_PLAYLISTS"; payload: FeaturedPlaylists };
+  | { type: "SET_FEATURED_PLAYLISTS"; payload: FeaturedPlaylists }
+  | { type: "SET_FAVOURITE_ARTISTS"; payload: Artists };
 
 export const initialState: InitialStateType = {
   token: null,
@@ -65,6 +73,7 @@ export const initialState: InitialStateType = {
   trackOffset: 0,
   user: null,
   featuredPlaylist: null,
+  favouriteArtists: null,
 };
 
 export const stateReducer = (
@@ -125,6 +134,12 @@ export const stateReducer = (
       return {
         ...initialState,
         featuredPlaylist: action.payload,
+      };
+
+    case "SET_FAVOURITE_ARTISTS":
+      return {
+        ...initialState,
+        favouriteArtists: action.payload,
       };
 
     default:
