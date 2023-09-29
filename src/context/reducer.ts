@@ -62,7 +62,7 @@ export type ActionType =
   | { type: "SET_TRACK_OFFSET"; payload: number }
   | { type: "SET_USER"; payload: User }
   | { type: "SET_FEATURED_PLAYLISTS"; payload: FeaturedPlaylists }
-  | { type: "SET_FAVOURITE_ARTISTS"; payload: Artists };
+  | { type: "SET_FAVOURITE_ARTISTS"; payload: Artists[] };
 
 export const initialState: InitialStateType = {
   token: null,
