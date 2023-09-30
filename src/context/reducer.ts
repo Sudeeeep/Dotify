@@ -11,7 +11,7 @@ export type SelectedPlaylistDetails = PlaylistsType & {
   total: number;
 };
 
-export type FeaturedPlaylists = {
+export type FeaturedPlaylistsType = {
   message: string;
   playlists: PlaylistsType[];
 };
@@ -48,7 +48,7 @@ export type InitialStateType = {
   tracks: Tracks[];
   trackOffset: number;
   user: User | null;
-  featuredPlaylist: FeaturedPlaylists | null;
+  featuredPlaylist: FeaturedPlaylistsType | null;
   favouriteArtists: Artists[] | null;
 };
 
@@ -61,7 +61,7 @@ export type ActionType =
   | { type: "RESET_TRACKS" }
   | { type: "SET_TRACK_OFFSET"; payload: number }
   | { type: "SET_USER"; payload: User }
-  | { type: "SET_FEATURED_PLAYLISTS"; payload: FeaturedPlaylists }
+  | { type: "SET_FEATURED_PLAYLISTS"; payload: FeaturedPlaylistsType }
   | { type: "SET_FAVOURITE_ARTISTS"; payload: Artists[] };
 
 export const initialState: InitialStateType = {
