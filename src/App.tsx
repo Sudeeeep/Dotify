@@ -6,6 +6,9 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { PlaylistDetails } from "./components/PlaylistDetails";
 import { Home } from "./components/Home";
 import axios from "axios";
+import { FeaturedPlaylists } from "./components/FeaturedPlaylists";
+import { YourPlaylists } from "./components/YourPlaylists";
+import { TopArtists } from "./components/TopArtists";
 
 function App() {
   const {
@@ -65,6 +68,18 @@ function App() {
         {
           path: "/playlist/:playlistId",
           element: <PlaylistDetails />,
+        },
+        {
+          path: "/featured-playlists",
+          element: <FeaturedPlaylists />,
+        },
+        {
+          path: "/your-playlists",
+          element: <YourPlaylists />,
+        },
+        {
+          path: "/top-artists",
+          element: <TopArtists />,
         },
       ],
     },
