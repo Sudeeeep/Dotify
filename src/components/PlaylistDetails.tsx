@@ -4,6 +4,8 @@ import axios from "axios";
 import { AiFillPlayCircle } from "react-icons/ai";
 import { useParams } from "react-router-dom";
 import { User } from "./User";
+import { changeDateFormat } from "../helpers/changeDateFormat";
+import { msConvert } from "../helpers/msConvert";
 
 export const PlaylistDetails = () => {
   const {
@@ -109,21 +111,6 @@ export const PlaylistDetails = () => {
 
   //   console.log(tracks);
   //   console.log(trackOffset);
-
-  function msConvert(ms: number) {
-    const minutes = Math.floor(ms / 60000);
-    const seconds = Number(((ms % 60000) / 1000).toFixed(0));
-    return seconds == 60
-      ? minutes + 1 + ":00"
-      : minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
-  }
-
-  function changeDateFormat(date: string) {
-    const day = date.slice(8, 10);
-    const month = date.slice(4, 7);
-    const year = date.slice(11, 15);
-    return `${day} ${month} ${year}`;
-  }
 
   if (selectedPlaylistDetails && tracks.length !== 0) {
     return (
