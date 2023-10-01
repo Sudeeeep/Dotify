@@ -9,6 +9,7 @@ import axios from "axios";
 import { FeaturedPlaylists } from "./components/FeaturedPlaylists";
 import { YourPlaylists } from "./components/YourPlaylists";
 import { TopArtists } from "./components/TopArtists";
+import { ArtistDetails } from "./components/ArtistDetails";
 
 function App() {
   const {
@@ -80,6 +81,10 @@ function App() {
         {
           path: "/top-artists",
           element: <TopArtists />,
+        },
+        {
+          path: "/artist/:artistId",
+          element: <ArtistDetails />,
         },
       ],
     },

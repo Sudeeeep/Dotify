@@ -40,6 +40,13 @@ export type Artists = {
   artistImg: string;
 };
 
+export type ArtistDetailsType = Artists & {
+  followers: number;
+  uri: string;
+};
+
+export type ArtistTracksType = Omit<Tracks, "artists" | "dateAdded">;
+
 export type InitialStateType = {
   token: string | null;
   playlists: PlaylistsType[] | null;
@@ -50,6 +57,9 @@ export type InitialStateType = {
   user: User | null;
   featuredPlaylist: FeaturedPlaylistsType | null;
   favouriteArtists: Artists[] | null;
+  selectedArtistId: string | null;
+  selectedArtistDetails: ArtistDetailsType | null;
+  selectedArtistTracks: ArtistTracksType[];
 };
 
 export type ActionType =
@@ -62,7 +72,10 @@ export type ActionType =
   | { type: "SET_TRACK_OFFSET"; payload: number }
   | { type: "SET_USER"; payload: User }
   | { type: "SET_FEATURED_PLAYLISTS"; payload: FeaturedPlaylistsType }
-  | { type: "SET_FAVOURITE_ARTISTS"; payload: Artists[] };
+  | { type: "SET_FAVOURITE_ARTISTS"; payload: Artists[] }
+  | { type: "SET_SELECTED_ARTIST"; payload: string }
+  | { type: "SET_SELECTED_ARTIST_DETAILS"; payload: ArtistDetailsType }
+  | { type: "SET_ARTIST_TRACKS"; payload: ArtistTracksType[] };
 
 export const initialState: InitialStateType = {
   token: null,
@@ -74,6 +87,9 @@ export const initialState: InitialStateType = {
   user: null,
   featuredPlaylist: null,
   favouriteArtists: null,
+  selectedArtistId: null,
+  selectedArtistDetails: null,
+  selectedArtistTracks: [],
 };
 
 export const stateReducer = (
@@ -140,6 +156,24 @@ export const stateReducer = (
       return {
         ...initialState,
         favouriteArtists: action.payload,
+      };
+
+    case "SET_SELECTED_ARTIST":
+      return {
+        ...initialState,
+        selectedArtistId: action.payload,
+      };
+
+    case "SET_SELECTED_ARTIST_DETAILS":
+      return {
+        ...initialState,
+        selectedArtistDetails: action.payload,
+      };
+
+    case "SET_ARTIST_TRACKS":
+      return {
+        ...initialState,
+        selectedArtistTracks: action.payload,
       };
 
     default:

@@ -50,7 +50,16 @@ export const TopArtists = ({ home }: { home?: boolean }) => {
           <div className="grid grid-cols-4 gap-6">
             {(home ? favouriteArtists.slice(0, 8) : favouriteArtists).map(
               (item, index) => (
-                <div key={index} className="">
+                <Link
+                  to={`/artist/${item.artistId}`}
+                  key={index}
+                  onClick={() =>
+                    dispatch({
+                      type: "SET_SELECTED_ARTIST",
+                      payload: item.artistId,
+                    })
+                  }
+                >
                   <div className="flex flex-col gap-4 items-center">
                     <div className="relative">
                       <img
@@ -63,7 +72,7 @@ export const TopArtists = ({ home }: { home?: boolean }) => {
                       {item.artistName}
                     </p>
                   </div>
-                </div>
+                </Link>
               )
             )}
           </div>
