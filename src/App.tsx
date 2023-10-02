@@ -10,6 +10,7 @@ import { FeaturedPlaylists } from "./components/FeaturedPlaylists";
 import { YourPlaylists } from "./components/YourPlaylists";
 import { TopArtists } from "./components/TopArtists";
 import { ArtistDetails } from "./components/ArtistDetails";
+import { ArtistAlbums } from "./components/ArtistAlbums";
 
 function App() {
   const {
@@ -85,6 +86,11 @@ function App() {
         {
           path: "/artist/:artistId",
           element: <ArtistDetails />,
+        },
+
+        {
+          path: "/artist/:artistId/albums",
+          element: <ArtistAlbums />,
         },
       ],
     },

@@ -47,6 +47,16 @@ export type ArtistDetailsType = Artists & {
 
 export type ArtistTracksType = Omit<Tracks, "artists" | "dateAdded">;
 
+export type AlbumType = {
+  albumId: string;
+  albumName: string;
+  type: string;
+  releaseDate: string;
+  albumImg: string;
+  uri: string;
+  artists: [{ id: string; name: string; uri: string }];
+};
+
 export type InitialStateType = {
   token: string | null;
   playlists: PlaylistsType[] | null;
@@ -60,6 +70,7 @@ export type InitialStateType = {
   selectedArtistId: string | null;
   selectedArtistDetails: ArtistDetailsType | null;
   selectedArtistTracks: ArtistTracksType[];
+  artistAlbums: AlbumType[] | null;
 };
 
 export type ActionType =
@@ -75,7 +86,8 @@ export type ActionType =
   | { type: "SET_FAVOURITE_ARTISTS"; payload: Artists[] }
   | { type: "SET_SELECTED_ARTIST"; payload: string }
   | { type: "SET_SELECTED_ARTIST_DETAILS"; payload: ArtistDetailsType }
-  | { type: "SET_ARTIST_TRACKS"; payload: ArtistTracksType[] };
+  | { type: "SET_ARTIST_TRACKS"; payload: ArtistTracksType[] }
+  | { type: "SET_ALBUMS"; payload: AlbumType[] };
 
 export const initialState: InitialStateType = {
   token: null,
@@ -90,6 +102,7 @@ export const initialState: InitialStateType = {
   selectedArtistId: null,
   selectedArtistDetails: null,
   selectedArtistTracks: [],
+  artistAlbums: null,
 };
 
 export const stateReducer = (
@@ -174,6 +187,12 @@ export const stateReducer = (
       return {
         ...initialState,
         selectedArtistTracks: action.payload,
+      };
+
+    case "SET_ALBUMS":
+      return {
+        ...initialState,
+        artistAlbums: action.payload,
       };
 
     default:
