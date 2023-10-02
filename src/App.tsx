@@ -12,6 +12,7 @@ import { TopArtists } from "./components/TopArtists";
 import { ArtistDetails } from "./components/ArtistDetails";
 import { ArtistAlbums } from "./components/ArtistAlbums";
 import { RelatedArtists } from "./components/RelatedArtists";
+import { AlbumDetails } from "./components/AlbumDetails";
 
 function App() {
   const {
@@ -96,6 +97,10 @@ function App() {
         {
           path: "/artist/:artistId/related-artists",
           element: <RelatedArtists />,
+        },
+        {
+          path: "/album/:albumId",
+          element: <AlbumDetails />,
         },
       ],
     },

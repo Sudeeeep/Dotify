@@ -57,6 +57,11 @@ export type AlbumType = {
   artists: [{ id: string; name: string; uri: string }];
 };
 
+export type AlbumDetailsType = AlbumType & {
+  total: number;
+  tracks: Omit<Tracks[], "album" | "albumImg" | "dateAdded">;
+};
+
 export type InitialStateType = {
   token: string | null;
   playlists: PlaylistsType[] | null;
@@ -72,6 +77,8 @@ export type InitialStateType = {
   selectedArtistTracks: ArtistTracksType[];
   artistAlbums: AlbumType[] | null;
   relatedArtists: Artists[] | null;
+  selectedAlbumId: string | null;
+  selectedAlbumDetails: AlbumDetailsType | null;
 };
 
 export type ActionType =
@@ -89,7 +96,9 @@ export type ActionType =
   | { type: "SET_SELECTED_ARTIST_DETAILS"; payload: ArtistDetailsType }
   | { type: "SET_ARTIST_TRACKS"; payload: ArtistTracksType[] }
   | { type: "SET_ALBUMS"; payload: AlbumType[] }
-  | { type: "SET_RELATED_ARTISTS"; payload: Artists[] };
+  | { type: "SET_RELATED_ARTISTS"; payload: Artists[] }
+  | { type: "SET_SELECTED_ALBUM"; payload: string }
+  | { type: "SET_SELECTED_ALBUM_DETAILS"; payload: AlbumDetailsType };
 
 export const initialState: InitialStateType = {
   token: null,
@@ -106,6 +115,8 @@ export const initialState: InitialStateType = {
   selectedArtistTracks: [],
   artistAlbums: null,
   relatedArtists: null,
+  selectedAlbumId: null,
+  selectedAlbumDetails: null,
 };
 
 export const stateReducer = (
@@ -202,6 +213,17 @@ export const stateReducer = (
       return {
         ...initialState,
         relatedArtists: action.payload,
+      };
+
+    case "SET_SELECTED_ALBUM":
+      return {
+        ...initialState,
+        selectedAlbumId: action.payload,
+      };
+    case "SET_SELECTED_ALBUM_DETAILS":
+      return {
+        ...initialState,
+        selectedAlbumDetails: action.payload,
       };
 
     default:
