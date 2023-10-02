@@ -71,6 +71,7 @@ export type InitialStateType = {
   selectedArtistDetails: ArtistDetailsType | null;
   selectedArtistTracks: ArtistTracksType[];
   artistAlbums: AlbumType[] | null;
+  relatedArtists: Artists[] | null;
 };
 
 export type ActionType =
@@ -87,7 +88,8 @@ export type ActionType =
   | { type: "SET_SELECTED_ARTIST"; payload: string }
   | { type: "SET_SELECTED_ARTIST_DETAILS"; payload: ArtistDetailsType }
   | { type: "SET_ARTIST_TRACKS"; payload: ArtistTracksType[] }
-  | { type: "SET_ALBUMS"; payload: AlbumType[] };
+  | { type: "SET_ALBUMS"; payload: AlbumType[] }
+  | { type: "SET_RELATED_ARTISTS"; payload: Artists[] };
 
 export const initialState: InitialStateType = {
   token: null,
@@ -103,6 +105,7 @@ export const initialState: InitialStateType = {
   selectedArtistDetails: null,
   selectedArtistTracks: [],
   artistAlbums: null,
+  relatedArtists: null,
 };
 
 export const stateReducer = (
@@ -193,6 +196,12 @@ export const stateReducer = (
       return {
         ...initialState,
         artistAlbums: action.payload,
+      };
+
+    case "SET_RELATED_ARTISTS":
+      return {
+        ...initialState,
+        relatedArtists: action.payload,
       };
 
     default:
