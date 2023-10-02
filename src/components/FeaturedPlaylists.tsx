@@ -61,7 +61,7 @@ export const FeaturedPlaylists = ({ home }: { home?: boolean }) => {
 
   if (featuredPlaylist) {
     return (
-      <div className={home ? "" : `overflow-auto col-span-3`}>
+      <div className={home ? "" : `col-span-3`}>
         {!home && <User />}
         <div
           className={
