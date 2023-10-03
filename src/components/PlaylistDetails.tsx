@@ -2,7 +2,7 @@ import { useContext, useEffect } from "react";
 import { StateContext } from "../context/StateContext";
 import axios from "axios";
 import { AiFillPlayCircle } from "react-icons/ai";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { User } from "./User";
 import { changeDateFormat } from "../helpers/changeDateFormat";
 import { msConvert } from "../helpers/msConvert";
@@ -78,13 +78,14 @@ export const PlaylistDetails = () => {
           data = data.items.map(({ added_at, track }) => {
             return { added_at: added_at.slice(0, 10), track };
           });
-          //   console.log(data);
+          console.log(data);
           const fetchedtracks = data.map((item) => {
             return {
               id: item.track.id,
               trackName: item.track.name,
               uri: item.track.uri,
-              album: item.track.album.name,
+              albumName: item.track.album.name,
+              albumId: item.track.album.id,
               albumImage: item.track.album.images[0]?.url,
               dateAdded: changeDateFormat(new Date(item.added_at).toString()),
               duration: msConvert(item.track.duration_ms),
@@ -170,19 +171,48 @@ export const PlaylistDetails = () => {
                         className="w-10 h-10"
                       />
                       <div className="flex flex-col">
-                        <p className="text-white">{track.trackName}</p>
-                        <p className="text-sm">
+                        <p className="text-white hover:underline cursor-pointer">
+                          {track.trackName}
+                        </p>
+                        <div className="text-sm">
                           {track.artists.length > 1
                             ? track.artists.map((artist, index) => {
-                                return index === track.artists.length - 1
-                                  ? artist.name
-                                  : artist.name + ", ";
+                                return index === track.artists.length - 1 ? (
+                                  <Link
+                                    to={`/artist/${artist.id}`}
+                                    key={index}
+                                    className="hover:underline cursor-pointer"
+                                  >
+                                    {artist.name}
+                                  </Link>
+                                ) : (
+                                  <Link
+                                    to={`/artist/${artist.id}`}
+                                    key={index}
+                                    className="hover:underline cursor-pointer"
+                                  >
+                                    {artist.name + ", "}
+                                  </Link>
+                                );
                               })
-                            : track.artists.map((artist) => artist.name)}
-                        </p>
+                            : track.artists.map((artist) => (
+                                <Link
+                                  to={`/artist/${artist.id}`}
+                                  key={index}
+                                  className="hover:underline cursor-pointer"
+                                >
+                                  {artist.name}
+                                </Link>
+                              ))}
+                        </div>
                       </div>
                     </div>
-                    <div>{track.album}</div>
+                    <Link
+                      to={`/album/${track.albumId}`}
+                      className="hover:underline cursor-pointer"
+                    >
+                      {track.albumName}
+                    </Link>
                     <div>{track.dateAdded}</div>
                     <div>{track.duration}</div>
                   </div>

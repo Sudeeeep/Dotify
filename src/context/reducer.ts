@@ -20,7 +20,8 @@ export type Tracks = {
   id: string;
   trackName: string;
   uri: string;
-  album: string;
+  albumName: string;
+  albumId: string;
   albumImage: string;
   dateAdded: string;
   duration: number;
