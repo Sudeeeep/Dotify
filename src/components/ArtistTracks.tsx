@@ -2,7 +2,7 @@ import axios from "axios";
 import { useContext, useEffect } from "react";
 import { StateContext } from "../context/StateContext";
 import { msConvert } from "../helpers/msConvert";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 export const ArtistTracks = () => {
   const {
@@ -33,7 +33,8 @@ export const ArtistTracks = () => {
               id: item.id,
               trackName: item.name,
               uri: item.uri,
-              album: item.album.name,
+              albumId: item.album.id,
+              albumName: item.album.name,
               albumImage: item.album.images[0]?.url,
               duration: msConvert(item.duration_ms),
             };
@@ -71,9 +72,12 @@ export const ArtistTracks = () => {
               </p>
             </div>
             <div>
-              <p className="hover:underline cursor-pointer w-fit">
-                {track.album}
-              </p>
+              <Link
+                to={`/album/${track.albumId}`}
+                className="hover:underline cursor-pointer w-fit"
+              >
+                {track.albumName}
+              </Link>
             </div>
             <div>{track.duration}</div>
           </div>
