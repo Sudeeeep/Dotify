@@ -3,6 +3,7 @@ import { StateContext } from "../context/StateContext";
 import axios from "axios";
 import { User } from "./User";
 import { Link, useParams } from "react-router-dom";
+import { RelatedArtistsResponse } from "../types/ResponseTypes/RelatedArtistResponse";
 
 export const RelatedArtists = ({ artistPage }: { artistPage?: boolean }) => {
   const {
@@ -26,7 +27,8 @@ export const RelatedArtists = ({ artistPage }: { artistPage?: boolean }) => {
             },
           }
         )
-        .then(({ data }) => {
+        .then(({ data }: { data: RelatedArtistsResponse }) => {
+          console.log(data);
           const artistDetails = data.artists.map((item) => {
             return {
               artistId: item.id,

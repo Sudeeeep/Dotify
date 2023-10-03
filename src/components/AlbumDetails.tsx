@@ -6,10 +6,11 @@ import { msConvert } from "../helpers/msConvert";
 import { User } from "./User";
 import { AiFillPlayCircle } from "react-icons/ai";
 import { ArtistAlbums } from "./ArtistAlbums";
+import { AlbumDetailsResponse } from "../types/ResponseTypes/AlbumDetailsResponse";
 
 export const AlbumDetails = () => {
   const {
-    state: { token, selectedAlbumId, selectedAlbumDetails, selectedArtistId },
+    state: { token, selectedAlbumId, selectedAlbumDetails },
     dispatch,
   } = useContext(StateContext);
   const divRef = useRef<HTMLDivElement>(null);
@@ -35,7 +36,7 @@ export const AlbumDetails = () => {
             Authorization: `Bearer ${token}`,
           },
         })
-        .then(({ data }) => {
+        .then(({ data }: { data: AlbumDetailsResponse }) => {
           //   console.log(data);
           const albumDetails = {
             albumId: data.id,
@@ -45,38 +46,18 @@ export const AlbumDetails = () => {
             albumImg: data.images[0].url,
             uri: data.uri,
             total: data.tracks.total,
-            artists: data.artists.map(
-              ({
-                id,
-                name,
-                uri,
-              }: {
-                id: string;
-                name: string;
-                uri: string;
-              }) => {
-                return { id, name, uri };
-              }
-            ),
+            artists: data.artists.map(({ id, name, uri }) => {
+              return { id, name, uri };
+            }),
             tracks: data.tracks.items.map((track) => {
               return {
                 id: track.id,
                 trackName: track.name,
                 uri: track.name,
                 duration: msConvert(track.duration_ms),
-                artists: track.artists.map(
-                  ({
-                    id,
-                    name,
-                    uri,
-                  }: {
-                    id: string;
-                    name: string;
-                    uri: string;
-                  }) => {
-                    return { id, name, uri };
-                  }
-                ),
+                artists: track.artists.map(({ id, name, uri }) => {
+                  return { id, name, uri };
+                }),
               };
             }),
           };

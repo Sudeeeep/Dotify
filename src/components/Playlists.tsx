@@ -2,8 +2,8 @@ import { useContext, useEffect } from "react";
 import { BiSolidPlaylist } from "react-icons/bi";
 import { StateContext } from "../context/StateContext";
 import axios from "axios";
-import { PlaylistsType } from "../context/reducer";
 import { Link } from "react-router-dom";
+import { PlaylistsResponse } from "../types/ResponseTypes/PlaylistsResponse";
 
 export const Playlists = () => {
   const {
@@ -13,24 +13,14 @@ export const Playlists = () => {
 
   useEffect(() => {
     axios
-      .get("https://api.spotify.com/v1/me/playlists", {
+      .get("https://api.spotify.com/v1/me/playlists?fields=items", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
-      .then(({ data }) => {
-        const userPlaylists: PlaylistsType[] = data.items.map(
-          ({
-            images: [{ url }],
-            name,
-            id,
-            description,
-          }: {
-            images: [{ height: number; url: string; width: number }];
-            name: string;
-            id: string;
-            description: string;
-          }) => {
+      .then(({ data }: { data: PlaylistsResponse }) => {
+        const userPlaylists = data.items.map(
+          ({ images: [{ url }], name, id, description }) => {
             return { url, id, name, description };
           }
         );

@@ -4,6 +4,7 @@ import { StateContext } from "../context/StateContext";
 import { ArtistDetailsType } from "../context/reducer";
 import { useParams } from "react-router-dom";
 import { RiPlayFill } from "react-icons/ri";
+import { ArtistDetailsResponse } from "../types/ResponseTypes/ArtistDetailsResponse";
 
 export const ArtistHeader = () => {
   const {
@@ -24,7 +25,7 @@ export const ArtistHeader = () => {
             Authorization: `Bearer ${token}`,
           },
         })
-        .then(({ data }) => {
+        .then(({ data }: { data: ArtistDetailsResponse }) => {
           const artistDetails: ArtistDetailsType = {
             artistId: data.id,
             artistName: data.name,

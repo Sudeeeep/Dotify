@@ -6,6 +6,9 @@ import { Link, useParams } from "react-router-dom";
 import { User } from "./User";
 import { changeDateFormat } from "../helpers/changeDateFormat";
 import { msConvert } from "../helpers/msConvert";
+import { Tracks } from "../context/reducer";
+import { PlaylistTracksResponse } from "../types/ResponseTypes/PlaylistTracksResponse";
+import { PlaylistDetailsResponse } from "../types/ResponseTypes/PlaylistDetailsResponse";
 
 export const PlaylistDetails = () => {
   const {
@@ -41,16 +44,16 @@ export const PlaylistDetails = () => {
             Authorization: `Bearer ${token}`,
           },
         })
-        .then((res) => {
-          //   console.log(res.data);
+        .then(({ data }: { data: PlaylistDetailsResponse }) => {
+          console.log(data);
           const playlistDetails = {
-            name: res.data.name,
-            id: res.data.id,
-            description: res.data.description,
-            followers: res.data.followers.total,
-            url: res.data.images[0].url,
-            ownerName: res.data.owner.display_name,
-            total: res.data.tracks.total,
+            name: data.name,
+            id: data.id,
+            description: data.description,
+            followers: data.followers.total,
+            url: data.images[0].url,
+            ownerName: data.owner.display_name,
+            total: data.tracks.total,
           };
           //   console.log(playlistDetails);
           dispatch({
@@ -66,20 +69,19 @@ export const PlaylistDetails = () => {
     if (selectedPlaylistId) {
       axios
         .get(
-          `https://api.spotify.com/v1/playlists/${selectedPlaylistId}/tracks?offset=${trackOffset}&limit=20`,
+          `https://api.spotify.com/v1/playlists/${selectedPlaylistId}/tracks?offset=${trackOffset}&limit=20&fields=items`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
         )
-        .then(({ data }) => {
-          //   console.log(data.items);
-          data = data.items.map(({ added_at, track }) => {
-            return { added_at: added_at.slice(0, 10), track };
+        .then(({ data }: { data: PlaylistTracksResponse }) => {
+          const newData = data.items.map(({ added_at, track }) => {
+            return { added_at: added_at.toString().slice(0, 10), track };
           });
-          console.log(data);
-          const fetchedtracks = data.map((item) => {
+
+          const fetchedtracks = newData.map<Tracks>((item) => {
             return {
               id: item.track.id,
               trackName: item.track.name,

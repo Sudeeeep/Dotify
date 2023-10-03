@@ -24,8 +24,8 @@ export type Tracks = {
   albumId: string;
   albumImage: string;
   dateAdded: string;
-  duration: number;
-  artists: [{ id: string; name: string; uri: string }];
+  duration: string;
+  artists: { id: string; name: string; uri: string }[];
 };
 
 export type User = {
@@ -55,12 +55,12 @@ export type AlbumType = {
   releaseDate: string;
   albumImg: string;
   uri: string;
-  artists: [{ id: string; name: string; uri: string }];
+  artists: { id: string; name: string; uri: string }[];
 };
 
 export type AlbumDetailsType = AlbumType & {
   total: number;
-  tracks: Omit<Tracks[], "albumName" | "albumId" | "albumImage" | "dateAdded">;
+  tracks: Omit<Tracks, "albumName" | "albumId" | "albumImage" | "dateAdded">[];
 };
 
 export type InitialStateType = {

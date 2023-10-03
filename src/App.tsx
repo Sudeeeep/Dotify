@@ -13,6 +13,7 @@ import { ArtistDetails } from "./components/ArtistDetails";
 import { ArtistAlbums } from "./components/ArtistAlbums";
 import { RelatedArtists } from "./components/RelatedArtists";
 import { AlbumDetails } from "./components/AlbumDetails";
+import { UserResponse } from "./types/ResponseTypes/UserResponse";
 
 function App() {
   const {
@@ -44,7 +45,7 @@ function App() {
             Authorization: `Bearer ${token}`,
           },
         })
-        .then(({ data }) => {
+        .then(({ data }: { data: UserResponse }) => {
           dispatch({
             type: "SET_USER",
             payload: {

@@ -3,6 +3,7 @@ import { useContext, useEffect } from "react";
 import { StateContext } from "../context/StateContext";
 import { msConvert } from "../helpers/msConvert";
 import { Link, useParams } from "react-router-dom";
+import { ArtistTracksResponse } from "../types/ResponseTypes/ArtistTracksResponse";
 
 export const ArtistTracks = () => {
   const {
@@ -26,8 +27,7 @@ export const ArtistTracks = () => {
             },
           }
         )
-        .then(({ data }) => {
-          console.log(data);
+        .then(({ data }: { data: ArtistTracksResponse }) => {
           const artistTracks = data.tracks.map((item) => {
             return {
               id: item.id,

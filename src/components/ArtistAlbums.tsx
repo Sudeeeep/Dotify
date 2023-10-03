@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { StateContext } from "../context/StateContext";
 import axios from "axios";
 import { User } from "./User";
+import { ArtistAlbumsResponse } from "../types/ResponseTypes/ArtistAlbumsResponse";
 
 export const ArtistAlbums = ({
   artistPage,
@@ -28,7 +29,7 @@ export const ArtistAlbums = ({
             Authorization: `Bearer ${token}`,
           },
         })
-        .then(({ data }) => {
+        .then(({ data }: { data: ArtistAlbumsResponse }) => {
           console.log(data);
           const albums = data.items.map((item) => {
             return {

@@ -3,6 +3,7 @@ import { StateContext } from "../context/StateContext";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { User } from "./User";
+import { TopArtistsResponse } from "../types/ResponseTypes/TopArtistsResponse";
 
 export const TopArtists = ({ home }: { home?: boolean }) => {
   const {
@@ -17,8 +18,7 @@ export const TopArtists = ({ home }: { home?: boolean }) => {
           Authorization: `Bearer ${token}`,
         },
       })
-      .then(({ data }) => {
-        console.log(data);
+      .then(({ data }: { data: TopArtistsResponse }) => {
         const artistDetails = data.items.map((item) => {
           return {
             artistId: item.id,

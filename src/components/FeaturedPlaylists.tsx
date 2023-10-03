@@ -5,6 +5,7 @@ import { FeaturedPlaylistsType } from "../context/reducer";
 import { RiPlayFill } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import { User } from "./User";
+import { FeaturedPlaylistsResponse } from "../types/ResponseTypes/FeaturedPlaylistsResponse";
 
 export const FeaturedPlaylists = ({ home }: { home?: boolean }) => {
   const {
@@ -23,22 +24,12 @@ export const FeaturedPlaylists = ({ home }: { home?: boolean }) => {
             },
           }
         )
-        .then(({ data }) => {
+        .then(({ data }: { data: FeaturedPlaylistsResponse }) => {
           console.log(data);
           const playlistDetails: FeaturedPlaylistsType = {
             message: data.message,
             playlists: data.playlists.items.map(
-              ({
-                id,
-                name,
-                description,
-                images,
-              }: {
-                id: string;
-                name: string;
-                description: string;
-                images: [{ url: string }];
-              }) => {
+              ({ id, name, description, images }) => {
                 return {
                   id,
                   name,
