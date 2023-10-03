@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef } from "react";
 import { StateContext } from "../context/StateContext";
-import { useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 import { msConvert } from "../helpers/msConvert";
 import { User } from "./User";
@@ -17,7 +17,6 @@ export const AlbumDetails = () => {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    console.log(divRef.current);
     divRef.current?.scrollTo(0, 0);
   }, [pathname]);
 
@@ -100,8 +99,6 @@ export const AlbumDetails = () => {
     }
   }, [selectedAlbumId, albumId]);
 
-  console.log(selectedArtistId);
-
   if (selectedAlbumDetails) {
     return (
       <div className="col-span-3 overflow-hidden">
@@ -122,7 +119,12 @@ export const AlbumDetails = () => {
               </h1>
               <div>
                 <ul className="list-disc flex gap-6">
-                  <p>{selectedAlbumDetails.artists[0].name}</p>
+                  <Link
+                    to={`/artist/${selectedAlbumDetails.artists[0].id}`}
+                    className="hover:underline"
+                  >
+                    {selectedAlbumDetails.artists[0].name}
+                  </Link>
                   <li>{selectedAlbumDetails.releaseDate.slice(0, 4)}</li>
                   <li>{selectedAlbumDetails.total} songs</li>
                 </ul>
@@ -151,14 +153,36 @@ export const AlbumDetails = () => {
                     <p className="text-white hover:underline cursor-pointer">
                       {track.trackName}
                     </p>
-                    <p className="text-sm hover:underline cursor-pointer">
+                    <p className="text-sm">
                       {track.artists.length > 1
                         ? track.artists.map((artist, index) => {
-                            return index === track.artists.length - 1
-                              ? artist.name
-                              : artist.name + ", ";
+                            return index === track.artists.length - 1 ? (
+                              <Link
+                                to={`/artist/${artist.id}`}
+                                key={index}
+                                className="hover:underline cursor-pointer"
+                              >
+                                {artist.name}
+                              </Link>
+                            ) : (
+                              <Link
+                                to={`/artist/${artist.id}`}
+                                key={index}
+                                className="hover:underline cursor-pointer"
+                              >
+                                {artist.name + ", "}
+                              </Link>
+                            );
                           })
-                        : track.artists.map((artist) => artist.name)}
+                        : track.artists.map((artist) => (
+                            <Link
+                              to={`/artist/${artist.id}`}
+                              key={index}
+                              className="hover:underline cursor-pointer"
+                            >
+                              {artist.name}
+                            </Link>
+                          ))}
                     </p>
                   </div>
                 </div>
