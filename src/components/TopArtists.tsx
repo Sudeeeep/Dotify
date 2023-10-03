@@ -61,7 +61,7 @@ export const TopArtists = ({ home }: { home?: boolean }) => {
                   }
                 >
                   <div className="flex flex-col gap-4 items-center">
-                    <div className="relative">
+                    <div className="">
                       <img
                         src={item.artistImg}
                         alt={item.artistName}

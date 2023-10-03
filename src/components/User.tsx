@@ -29,7 +29,7 @@ export const User = () => {
       </div>
 
       <div
-        className={`bg-[#121212] flex flex-col absolute right-6  ${
+        className={`bg-[#121212] flex flex-col absolute right-6 z-[1]  ${
           menuVisible ? "block" : "hidden"
         }`}
       >

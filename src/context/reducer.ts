@@ -60,7 +60,7 @@ export type AlbumType = {
 
 export type AlbumDetailsType = AlbumType & {
   total: number;
-  tracks: Omit<Tracks[], "album" | "albumImg" | "dateAdded">;
+  tracks: Omit<Tracks[], "albumName" | "albumId" | "albumImage" | "dateAdded">;
 };
 
 export type InitialStateType = {
