@@ -14,13 +14,15 @@ export const Login = () => {
       "user-top-read",
     ];
 
+    const redirectUri = import.meta.env.PROD
+      ? import.meta.env.VITE_PROD_REDIRECT_URI
+      : import.meta.env.VITE_DEV_REDIRECT_URI;
+
     let url = "https://accounts.spotify.com/authorize";
     url += "?response_type=token";
     url += "&client_id=" + encodeURIComponent(import.meta.env.VITE_CLIENT_ID);
     url += "&scope=" + encodeURIComponent(scope.join(" "));
-    url +=
-      "&redirect_uri=" +
-      encodeURIComponent(import.meta.env.VITE_DEV_REDIRECT_URI);
+    url += "&redirect_uri=" + encodeURIComponent(redirectUri);
 
     window.location.href = url;
   }

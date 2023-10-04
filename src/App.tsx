@@ -29,7 +29,10 @@ function App() {
     } else if (window.location.hash) {
       const accessToken = window.location.hash.split("&")[0].split("=")[1];
       dispatch({ type: "SET_TOKEN", payload: accessToken });
-      window.location.replace(import.meta.env.VITE_DEV_REDIRECT_URI);
+      const redirectUri = import.meta.env.PROD
+        ? import.meta.env.VITE_PROD_REDIRECT_URI
+        : import.meta.env.VITE_DEV_REDIRECT_URI;
+      window.location.replace(redirectUri);
     }
     if (token) {
       sessionStorage.setItem("token", token);
