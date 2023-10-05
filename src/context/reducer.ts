@@ -80,6 +80,7 @@ export type InitialStateType = {
   relatedArtists: Artists[] | null;
   selectedAlbumId: string | null;
   selectedAlbumDetails: AlbumDetailsType | null;
+  searchTerm: string;
 };
 
 export type ActionType =
@@ -99,7 +100,8 @@ export type ActionType =
   | { type: "SET_ALBUMS"; payload: AlbumType[] }
   | { type: "SET_RELATED_ARTISTS"; payload: Artists[] }
   | { type: "SET_SELECTED_ALBUM"; payload: string }
-  | { type: "SET_SELECTED_ALBUM_DETAILS"; payload: AlbumDetailsType };
+  | { type: "SET_SELECTED_ALBUM_DETAILS"; payload: AlbumDetailsType }
+  | { type: "SET_SEARCH_TERM"; payload: string };
 
 export const initialState: InitialStateType = {
   token: null,
@@ -118,6 +120,7 @@ export const initialState: InitialStateType = {
   relatedArtists: null,
   selectedAlbumId: null,
   selectedAlbumDetails: null,
+  searchTerm: "",
 };
 
 export const stateReducer = (
@@ -225,6 +228,12 @@ export const stateReducer = (
       return {
         ...initialState,
         selectedAlbumDetails: action.payload,
+      };
+
+    case "SET_SEARCH_TERM":
+      return {
+        ...initialState,
+        searchTerm: action.payload,
       };
 
     default:

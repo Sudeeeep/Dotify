@@ -14,6 +14,7 @@ import { ArtistAlbums } from "./components/ArtistAlbums";
 import { RelatedArtists } from "./components/RelatedArtists";
 import { AlbumDetails } from "./components/AlbumDetails";
 import { UserResponse } from "./types/ResponseTypes/UserResponse";
+import { Search } from "./components/Search";
 
 function App() {
   const {
@@ -105,6 +106,10 @@ function App() {
         {
           path: "/album/:albumId",
           element: <AlbumDetails />,
+        },
+        {
+          path: "/search",
+          element: <Search />,
         },
       ],
     },

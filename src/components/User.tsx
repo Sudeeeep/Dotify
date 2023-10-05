@@ -1,24 +1,49 @@
 import { useContext, useState } from "react";
 import { RiUser3Line } from "react-icons/ri";
+import { AiOutlineSearch } from "react-icons/ai";
 import { StateContext } from "../context/StateContext";
 import dotifyLogo from "../assets/images/spotify-2.svg";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export const User = () => {
   const {
-    state: { user },
+    state: { user, searchTerm },
     dispatch,
   } = useContext(StateContext);
 
+  const { pathname } = useLocation();
   const [menuVisible, setMenuVisible] = useState(false);
 
   return (
     <div className="pt-2 p-4">
       <div className="flex justify-between">
-        <Link to={"/"} className="flex items-center gap-2">
-          <img className="w-10 cursor-pointer" src={dotifyLogo} alt="dotify" />
-          <h1 className="text-2xl cursor-pointer">Dotify</h1>
-        </Link>
+        {pathname.includes("/search") ? (
+          <div className="w-1/2 flex items-center">
+            <span className="absolute px-4 text-xl">
+              <AiOutlineSearch />
+            </span>
+
+            <input
+              type="text"
+              name="search"
+              placeholder="What do you want to listen to?"
+              className="w-full px-12 py-3 rounded-full bg-[#242424]"
+              value={searchTerm}
+              onChange={(e) =>
+                dispatch({ type: "SET_SEARCH_TERM", payload: e.target.value })
+              }
+            />
+          </div>
+        ) : (
+          <Link to={"/"} className="flex items-center gap-2">
+            <img
+              className="w-10 cursor-pointer"
+              src={dotifyLogo}
+              alt="dotify"
+            />
+            <h1 className="text-2xl cursor-pointer">Dotify</h1>
+          </Link>
+        )}
         <div>
           <button
             className="bg-black p-3 border border-black rounded-full"

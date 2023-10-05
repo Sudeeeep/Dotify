@@ -1,0 +1,16 @@
+import { useContext } from "react";
+import { StateContext } from "../context/StateContext";
+import { Home } from "./Home";
+import { User } from "./User";
+export const Search = () => {
+  const {
+    state: { searchTerm },
+  } = useContext(StateContext);
+
+  return (
+    <div className="col-span-3 overflow-hidden">
+      <User />
+      {searchTerm == "" && <Home search />}
+    </div>
+  );
+};

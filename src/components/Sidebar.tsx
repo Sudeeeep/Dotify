@@ -12,10 +12,13 @@ export const Sidebar = () => {
             <span className="">Home</span>
           </div>
         </Link>
-        <div className="flex gap-2 text-xl text-[#A7A7A7] hover:text-white cursor-pointer">
+        <Link
+          to={"/search"}
+          className="flex gap-2 text-xl text-[#A7A7A7] hover:text-white cursor-pointer"
+        >
           <AiOutlineSearch />
           <span>Search</span>
-        </div>
+        </Link>
       </div>
       <Playlists />
     </div>

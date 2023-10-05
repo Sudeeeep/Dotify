@@ -5,7 +5,7 @@ import { TopArtists } from "./TopArtists";
 import { FeaturedPlaylists } from "./FeaturedPlaylists";
 import { YourPlaylists } from "./YourPlaylists";
 
-export const Home = () => {
+export const Home = ({ search }: { search?: boolean }) => {
   const {
     state: { playlists },
   } = useContext(StateContext);
@@ -13,7 +13,7 @@ export const Home = () => {
   if (playlists) {
     return (
       <div className="overflow-hidden col-span-3">
-        <User />
+        {!search && <User />}
         <div className="h-[75vh] px-8 py-4 overflow-auto">
           <FeaturedPlaylists home />
           <YourPlaylists home />
