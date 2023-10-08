@@ -4,6 +4,7 @@ import { Home } from "./Home";
 import { User } from "./User";
 import { SearchedTracks } from "./SearchedTracks";
 import { SearchedArtists } from "./SearchedArtists";
+import { SearchedAlbums } from "./SearchedAlbums";
 export const Search = () => {
   const {
     state: { searchTerm },
@@ -17,6 +18,7 @@ export const Search = () => {
         <div className="h-[75vh] px-8 py-4 overflow-auto">
           <SearchedTracks />
           <SearchedArtists />
+          <SearchedAlbums />
         </div>
       )}
     </div>
