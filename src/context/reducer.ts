@@ -54,14 +54,16 @@ export type AlbumType = {
   type: string;
   releaseDate: string;
   albumImg: string;
-  uri: string;
-  artists: { id: string; name: string; uri: string }[];
 };
 
 export type AlbumDetailsType = AlbumType & {
   total: number;
+  uri: string;
+  artists: { id: string; name: string; uri: string }[];
   tracks: Omit<Tracks, "albumName" | "albumId" | "albumImage" | "dateAdded">[];
 };
+
+export type SearchedTracksType = Omit<Tracks, "dateAdded">;
 
 export type InitialStateType = {
   token: string | null;
@@ -81,6 +83,10 @@ export type InitialStateType = {
   selectedAlbumId: string | null;
   selectedAlbumDetails: AlbumDetailsType | null;
   searchTerm: string;
+  searchedTracks: SearchedTracksType[] | null;
+  searchedArtists: Artists[] | null;
+  searchedAlbums: AlbumType[] | null;
+  searchedPlaylists: PlaylistsType[] | null;
 };
 
 export type ActionType =
@@ -101,7 +107,11 @@ export type ActionType =
   | { type: "SET_RELATED_ARTISTS"; payload: Artists[] }
   | { type: "SET_SELECTED_ALBUM"; payload: string }
   | { type: "SET_SELECTED_ALBUM_DETAILS"; payload: AlbumDetailsType }
-  | { type: "SET_SEARCH_TERM"; payload: string };
+  | { type: "SET_SEARCH_TERM"; payload: string }
+  | { type: "SET_SEARCHED_TRACKS"; payload: SearchedTracksType[] }
+  | { type: "SET_SEARCHED_ARTISTS"; payload: Artists[] }
+  | { type: "SET_SEARCHED_ALBUMS"; payload: AlbumType[] }
+  | { type: "SET_SEARCHED_PLAYLISTS"; payload: PlaylistsType[] };
 
 export const initialState: InitialStateType = {
   token: null,
@@ -121,6 +131,10 @@ export const initialState: InitialStateType = {
   selectedAlbumId: null,
   selectedAlbumDetails: null,
   searchTerm: "",
+  searchedTracks: null,
+  searchedArtists: null,
+  searchedAlbums: null,
+  searchedPlaylists: null,
 };
 
 export const stateReducer = (
@@ -234,6 +248,30 @@ export const stateReducer = (
       return {
         ...initialState,
         searchTerm: action.payload,
+      };
+
+    case "SET_SEARCHED_TRACKS":
+      return {
+        ...initialState,
+        searchedTracks: action.payload,
+      };
+
+    case "SET_SEARCHED_ARTISTS":
+      return {
+        ...initialState,
+        searchedArtists: action.payload,
+      };
+
+    case "SET_SEARCHED_ALBUMS":
+      return {
+        ...initialState,
+        searchedAlbums: action.payload,
+      };
+
+    case "SET_SEARCHED_PLAYLISTS":
+      return {
+        ...initialState,
+        searchedPlaylists: action.payload,
       };
 
     default:
