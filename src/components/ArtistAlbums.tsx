@@ -38,20 +38,6 @@ export const ArtistAlbums = ({
               type: item.album_type,
               releaseDate: item.release_date,
               albumImg: item.images[0].url,
-              uri: item.uri,
-              artists: item.artists.map(
-                ({
-                  id,
-                  name,
-                  uri,
-                }: {
-                  id: string;
-                  name: string;
-                  uri: string;
-                }) => {
-                  return { id, name, uri };
-                }
-              ),
             };
           });
           console.log(albums);
