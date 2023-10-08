@@ -5,6 +5,7 @@ import { User } from "./User";
 import { SearchedTracks } from "./SearchedTracks";
 import { SearchedArtists } from "./SearchedArtists";
 import { SearchedAlbums } from "./SearchedAlbums";
+import { SearchedPlaylists } from "./SearchedPlaylists";
 export const Search = () => {
   const {
     state: { searchTerm },
@@ -19,6 +20,7 @@ export const Search = () => {
           <SearchedTracks />
           <SearchedArtists />
           <SearchedAlbums />
+          <SearchedPlaylists />
         </div>
       )}
     </div>
