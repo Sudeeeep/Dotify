@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { RiUser3Line } from "react-icons/ri";
 import { AiOutlineSearch } from "react-icons/ai";
 import { StateContext } from "../context/StateContext";
@@ -14,6 +14,12 @@ export const User = () => {
   const { pathname } = useLocation();
   const [menuVisible, setMenuVisible] = useState(false);
 
+  useEffect(() => {
+    if (searchTerm !== "" && !pathname.includes("/search")) {
+      dispatch({ type: "SET_SEARCH_TERM", payload: "" });
+    }
+  }, []);
+
   return (
     <div className="pt-2 p-4">
       <div className="flex justify-between">
@@ -27,6 +33,7 @@ export const User = () => {
               type="text"
               name="search"
               placeholder="What do you want to listen to?"
+              autoComplete="off"
               className="w-full px-12 py-3 rounded-full bg-[#242424]"
               value={searchTerm}
               onChange={(e) =>
