@@ -12,6 +12,7 @@ export const Login = () => {
       "user-read-recently-played",
       "user-read-playback-position",
       "user-top-read",
+      "streaming",
     ];
 
     const redirectUri = import.meta.env.PROD
