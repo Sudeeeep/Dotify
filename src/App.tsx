@@ -24,7 +24,7 @@ function App() {
 
   //setToken
   useEffect(() => {
-    const savedToken = sessionStorage.getItem("token");
+    const savedToken = localStorage.getItem("token");
     if (savedToken) {
       dispatch({ type: "SET_TOKEN", payload: savedToken });
     } else if (window.location.hash) {
@@ -36,7 +36,7 @@ function App() {
       window.location.replace(redirectUri);
     }
     if (token) {
-      sessionStorage.setItem("token", token);
+      localStorage.setItem("token", token);
     }
   }, [token, dispatch]);
 

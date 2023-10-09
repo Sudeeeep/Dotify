@@ -77,7 +77,7 @@ export const User = () => {
           onClick={() => {
             setMenuVisible(false);
             dispatch({ type: "SET_TOKEN", payload: null });
-            sessionStorage.clear();
+            localStorage.clear();
           }}
         >
           Logout
