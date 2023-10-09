@@ -9,6 +9,7 @@ export type SelectedPlaylistDetails = PlaylistsType & {
   followers: number;
   ownerName: string;
   total: number;
+  uri: string;
 };
 
 export type FeaturedPlaylistsType = {

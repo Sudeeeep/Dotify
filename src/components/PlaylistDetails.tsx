@@ -54,6 +54,7 @@ export const PlaylistDetails = () => {
             url: data.images[0].url,
             ownerName: data.owner.display_name,
             total: data.tracks.total,
+            uri: data.uri,
           };
           //   console.log(playlistDetails);
           dispatch({
