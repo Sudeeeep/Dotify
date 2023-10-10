@@ -88,6 +88,7 @@ export type InitialStateType = {
   searchedArtists: Artists[] | null;
   searchedAlbums: AlbumType[] | null;
   searchedPlaylists: PlaylistsType[] | null;
+  uris: string[];
 };
 
 export type ActionType =
@@ -112,7 +113,8 @@ export type ActionType =
   | { type: "SET_SEARCHED_TRACKS"; payload: SearchedTracksType[] }
   | { type: "SET_SEARCHED_ARTISTS"; payload: Artists[] }
   | { type: "SET_SEARCHED_ALBUMS"; payload: AlbumType[] }
-  | { type: "SET_SEARCHED_PLAYLISTS"; payload: PlaylistsType[] };
+  | { type: "SET_SEARCHED_PLAYLISTS"; payload: PlaylistsType[] }
+  | { type: "SET_PLAYER_URIS"; payload: string[] };
 
 export const initialState: InitialStateType = {
   token: null,
@@ -136,6 +138,7 @@ export const initialState: InitialStateType = {
   searchedArtists: null,
   searchedAlbums: null,
   searchedPlaylists: null,
+  uris: [],
 };
 
 export const stateReducer = (
@@ -273,6 +276,12 @@ export const stateReducer = (
       return {
         ...initialState,
         searchedPlaylists: action.payload,
+      };
+
+    case "SET_PLAYER_URIS":
+      return {
+        ...initialState,
+        uris: action.payload,
       };
 
     default:

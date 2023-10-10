@@ -147,7 +147,15 @@ export const PlaylistDetails = () => {
 
           <div className="bg-[]">
             {/* Play/Pause button*/}
-            <div className="m-4">
+            <div
+              className="m-4 w-fit"
+              onClick={() =>
+                dispatch({
+                  type: "SET_PLAYER_URIS",
+                  payload: [selectedPlaylistDetails.uri],
+                })
+              }
+            >
               <AiFillPlayCircle className="text-[#1ED760] text-6xl cursor-pointer hover:scale-105" />
             </div>
 
