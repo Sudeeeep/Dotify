@@ -2,7 +2,6 @@ import { useContext } from "react";
 import { StateContext } from "../context/StateContext";
 import { Link } from "react-router-dom";
 import { User } from "./User";
-import { checkTokenExpiry } from "../helpers/checkTokenExpiry";
 
 export const YourPlaylists = ({ home }: { home?: boolean }) => {
   const {
@@ -11,7 +10,6 @@ export const YourPlaylists = ({ home }: { home?: boolean }) => {
   } = useContext(StateContext);
 
   if (playlists) {
-    checkTokenExpiry(dispatch);
     return (
       <div className={home ? "" : `col-span-3`}>
         {!home && <User />}
