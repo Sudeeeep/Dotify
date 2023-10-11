@@ -4,6 +4,7 @@ import axios from "axios";
 import { User } from "./User";
 import { Link, useParams } from "react-router-dom";
 import { RelatedArtistsResponse } from "../types/ResponseTypes/RelatedArtistResponse";
+import { checkTokenExpiry } from "../helpers/checkTokenExpiry";
 
 export const RelatedArtists = ({ artistPage }: { artistPage?: boolean }) => {
   const {
@@ -14,6 +15,7 @@ export const RelatedArtists = ({ artistPage }: { artistPage?: boolean }) => {
   const artistId = useParams().artistId;
 
   useEffect(() => {
+    checkTokenExpiry(dispatch);
     if (artistId) {
       dispatch({ type: "SET_SELECTED_ARTIST", payload: artistId });
     }

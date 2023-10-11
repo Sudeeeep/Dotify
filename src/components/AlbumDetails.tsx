@@ -7,6 +7,7 @@ import { User } from "./User";
 import { AiFillPlayCircle } from "react-icons/ai";
 import { ArtistAlbums } from "./ArtistAlbums";
 import { AlbumDetailsResponse } from "../types/ResponseTypes/AlbumDetailsResponse";
+import { checkTokenExpiry } from "../helpers/checkTokenExpiry";
 
 export const AlbumDetails = () => {
   const {
@@ -22,6 +23,7 @@ export const AlbumDetails = () => {
   }, [pathname]);
 
   useEffect(() => {
+    checkTokenExpiry(dispatch);
     if (albumId) {
       dispatch({
         type: "SET_SELECTED_ALBUM",

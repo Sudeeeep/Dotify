@@ -3,6 +3,7 @@ import { StateContext } from "../context/StateContext";
 import axios from "axios";
 import { SearchedArtistsResponse } from "../types/ResponseTypes/SearchedArtistsResponse";
 import { Link } from "react-router-dom";
+import { checkTokenExpiry } from "../helpers/checkTokenExpiry";
 
 export const SearchedArtists = () => {
   const {
@@ -11,6 +12,7 @@ export const SearchedArtists = () => {
   } = useContext(StateContext);
 
   useEffect(() => {
+    checkTokenExpiry(dispatch);
     axios
       .get(`https://api.spotify.com/v1/search?q=${searchTerm}&type=artist`, {
         headers: {

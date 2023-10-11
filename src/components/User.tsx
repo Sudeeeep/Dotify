@@ -4,6 +4,7 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { StateContext } from "../context/StateContext";
 import dotifyLogo from "../assets/images/spotify-2.svg";
 import { Link, useLocation } from "react-router-dom";
+import { checkTokenExpiry } from "../helpers/checkTokenExpiry";
 
 export const User = () => {
   const {
@@ -15,6 +16,7 @@ export const User = () => {
   const [menuVisible, setMenuVisible] = useState(false);
 
   useEffect(() => {
+    checkTokenExpiry(dispatch);
     if (searchTerm !== "" && !pathname.includes("/search")) {
       dispatch({ type: "SET_SEARCH_TERM", payload: "" });
     }

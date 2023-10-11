@@ -9,6 +9,7 @@ import { msConvert } from "../helpers/msConvert";
 import { Tracks } from "../context/reducer";
 import { PlaylistTracksResponse } from "../types/ResponseTypes/PlaylistTracksResponse";
 import { PlaylistDetailsResponse } from "../types/ResponseTypes/PlaylistDetailsResponse";
+import { checkTokenExpiry } from "../helpers/checkTokenExpiry";
 
 export const PlaylistDetails = () => {
   const {
@@ -28,6 +29,8 @@ export const PlaylistDetails = () => {
 
   //fetch selected playlist details
   useEffect(() => {
+    checkTokenExpiry(dispatch);
+
     if (playlistId) {
       dispatch({
         type: "SET_SELECTED_PLAYLIST",
@@ -67,6 +70,7 @@ export const PlaylistDetails = () => {
 
   //fetch the tracks in the selected playlist
   useEffect(() => {
+    checkTokenExpiry(dispatch);
     if (selectedPlaylistId) {
       axios
         .get(

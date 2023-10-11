@@ -4,6 +4,7 @@ import axios from "axios";
 import { SearchedTracksResponse } from "../types/ResponseTypes/SearchedTracksResponse";
 import { msConvert } from "../helpers/msConvert";
 import { Link } from "react-router-dom";
+import { checkTokenExpiry } from "../helpers/checkTokenExpiry";
 
 export const SearchedTracks = () => {
   const {
@@ -12,6 +13,7 @@ export const SearchedTracks = () => {
   } = useContext(StateContext);
 
   useEffect(() => {
+    checkTokenExpiry(dispatch);
     axios
       .get(`https://api.spotify.com/v1/search?q=${searchTerm}&type=track`, {
         headers: {

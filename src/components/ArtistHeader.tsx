@@ -5,6 +5,7 @@ import { ArtistDetailsType } from "../context/reducer";
 import { useParams } from "react-router-dom";
 import { RiPlayFill } from "react-icons/ri";
 import { ArtistDetailsResponse } from "../types/ResponseTypes/ArtistDetailsResponse";
+import { checkTokenExpiry } from "../helpers/checkTokenExpiry";
 
 export const ArtistHeader = () => {
   const {
@@ -15,6 +16,7 @@ export const ArtistHeader = () => {
   const artistId = useParams().artistId;
 
   useEffect(() => {
+    checkTokenExpiry(dispatch);
     if (artistId) {
       dispatch({ type: "SET_SELECTED_ARTIST", payload: artistId });
     }

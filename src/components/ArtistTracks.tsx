@@ -4,6 +4,7 @@ import { StateContext } from "../context/StateContext";
 import { msConvert } from "../helpers/msConvert";
 import { Link, useParams } from "react-router-dom";
 import { ArtistTracksResponse } from "../types/ResponseTypes/ArtistTracksResponse";
+import { checkTokenExpiry } from "../helpers/checkTokenExpiry";
 
 export const ArtistTracks = () => {
   const {
@@ -14,6 +15,7 @@ export const ArtistTracks = () => {
   const artistId = useParams().artistId;
 
   useEffect(() => {
+    checkTokenExpiry(dispatch);
     if (artistId) {
       dispatch({ type: "SET_SELECTED_ARTIST", payload: artistId });
     }

@@ -6,6 +6,7 @@ import { RiPlayFill } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import { User } from "./User";
 import { FeaturedPlaylistsResponse } from "../types/ResponseTypes/FeaturedPlaylistsResponse";
+import { checkTokenExpiry } from "../helpers/checkTokenExpiry";
 
 export const FeaturedPlaylists = ({ home }: { home?: boolean }) => {
   const {
@@ -14,6 +15,7 @@ export const FeaturedPlaylists = ({ home }: { home?: boolean }) => {
   } = useContext(StateContext);
 
   useEffect(() => {
+    checkTokenExpiry(dispatch);
     if (user?.country) {
       axios
         .get(
@@ -67,7 +69,7 @@ export const FeaturedPlaylists = ({ home }: { home?: boolean }) => {
               </Link>
             )}
           </div>
-          <div className="grid grid-cols-4 gap-6 mb-10">
+          <div className="grid grid-cols-5 gap-6 mb-10">
             {(home
               ? featuredPlaylist.playlists.slice(0, 8)
               : featuredPlaylist.playlists

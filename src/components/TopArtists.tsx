@@ -4,6 +4,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { User } from "./User";
 import { TopArtistsResponse } from "../types/ResponseTypes/TopArtistsResponse";
+import { checkTokenExpiry } from "../helpers/checkTokenExpiry";
 
 export const TopArtists = ({ home }: { home?: boolean }) => {
   const {
@@ -12,6 +13,7 @@ export const TopArtists = ({ home }: { home?: boolean }) => {
   } = useContext(StateContext);
 
   useEffect(() => {
+    checkTokenExpiry(dispatch);
     axios
       .get("https://api.spotify.com/v1/me/top/artists", {
         headers: {

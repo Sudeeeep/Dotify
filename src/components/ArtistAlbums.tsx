@@ -4,6 +4,7 @@ import { StateContext } from "../context/StateContext";
 import axios from "axios";
 import { User } from "./User";
 import { ArtistAlbumsResponse } from "../types/ResponseTypes/ArtistAlbumsResponse";
+import { checkTokenExpiry } from "../helpers/checkTokenExpiry";
 
 export const ArtistAlbums = ({
   artistPage,
@@ -19,6 +20,7 @@ export const ArtistAlbums = ({
 
   const artistId = useParams().artistId;
   useEffect(() => {
+    checkTokenExpiry(dispatch);
     if (artistId) {
       dispatch({ type: "SET_SELECTED_ARTIST", payload: artistId });
     }

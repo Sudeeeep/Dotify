@@ -4,6 +4,7 @@ import { StateContext } from "../context/StateContext";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { PlaylistsResponse } from "../types/ResponseTypes/PlaylistsResponse";
+import { checkTokenExpiry } from "../helpers/checkTokenExpiry";
 
 export const Playlists = () => {
   const {
@@ -12,6 +13,7 @@ export const Playlists = () => {
   } = useContext(StateContext);
 
   useEffect(() => {
+    checkTokenExpiry(dispatch);
     axios
       .get("https://api.spotify.com/v1/me/playlists?fields=items", {
         headers: {
