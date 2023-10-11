@@ -43,12 +43,8 @@ function App() {
     }
     if (token) {
       setItemWithExpiry("token", token, 3600000);
-    }
-  }, [token, dispatch]);
 
-  //fetch user details
-  useEffect(() => {
-    if (token) {
+      //fetch user details
       axios
         .get(`https://api.spotify.com/v1/me`, {
           headers: {
@@ -67,7 +63,7 @@ function App() {
           });
         });
     }
-  }, [token]);
+  }, [token, dispatch]);
 
   // console.log(token);
 
