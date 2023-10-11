@@ -22,8 +22,8 @@ export const Playlists = () => {
       })
       .then(({ data }: { data: PlaylistsResponse }) => {
         const userPlaylists = data.items.map(
-          ({ images: [{ url }], name, id, description }) => {
-            return { url, id, name, description };
+          ({ images: [{ url }], name, id, description, uri }) => {
+            return { url, id, name, description, uri };
           }
         );
         dispatch({ type: "SET_PLAYLISTS", payload: userPlaylists });

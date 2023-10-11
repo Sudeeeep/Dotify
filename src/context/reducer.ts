@@ -3,13 +3,13 @@ export type PlaylistsType = {
   id: string;
   url: string;
   description: string;
+  uri: string;
 };
 
 export type SelectedPlaylistDetails = PlaylistsType & {
   followers: number;
   ownerName: string;
   total: number;
-  uri: string;
 };
 
 export type FeaturedPlaylistsType = {

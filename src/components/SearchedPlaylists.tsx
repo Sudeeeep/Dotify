@@ -27,6 +27,7 @@ export const SearchedPlaylists = () => {
             name: item.name,
             url: item.images[0].url,
             description: item.description,
+            uri: item.uri,
           };
         });
         dispatch({ type: "SET_SEARCHED_PLAYLISTS", payload: playlists });
