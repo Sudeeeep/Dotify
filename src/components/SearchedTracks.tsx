@@ -56,10 +56,24 @@ export const SearchedTracks = () => {
                   <img
                     src={track.albumImage}
                     alt={track.trackName}
-                    className="w-8 h-8"
+                    className="w-8 h-8 cursor-pointer"
+                    onClick={() =>
+                      dispatch({
+                        type: "SET_PLAYER_URIS",
+                        payload: [track.uri],
+                      })
+                    }
                   />
                   <div className="flex flex-col">
-                    <p className="text-white hover:underline cursor-pointer line-clamp-1">
+                    <p
+                      className="text-white hover:underline cursor-pointer line-clamp-1"
+                      onClick={() =>
+                        dispatch({
+                          type: "SET_PLAYER_URIS",
+                          payload: [track.uri],
+                        })
+                      }
+                    >
                       {track.trackName}
                     </p>
                     <div className="text-sm text-[#858383] line-clamp-1">

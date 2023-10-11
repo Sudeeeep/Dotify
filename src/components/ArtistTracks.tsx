@@ -63,13 +63,27 @@ export const ArtistTracks = () => {
             className="grid grid-cols-[1rem_1fr_1fr_8rem] gap-4 p-4 hover:opacity-80 hover:bg-[#2d2d2d]"
           >
             <div>{index + 1}</div>
-            <div className="flex gap-2">
+            <div className="flex gap-4">
               <img
                 src={track.albumImage}
                 alt={track.trackName}
-                className="w-10 h-10"
+                className="w-10 h-10 cursor-pointer"
+                onClick={() =>
+                  dispatch({
+                    type: "SET_PLAYER_URIS",
+                    payload: [track.uri],
+                  })
+                }
               />
-              <p className="hover:underline cursor-pointer">
+              <p
+                className="hover:underline cursor-pointer"
+                onClick={() =>
+                  dispatch({
+                    type: "SET_PLAYER_URIS",
+                    payload: [track.uri],
+                  })
+                }
+              >
                 {track.trackName}
               </p>
             </div>

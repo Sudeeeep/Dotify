@@ -183,10 +183,24 @@ export const PlaylistDetails = () => {
                       <img
                         src={track.albumImage}
                         alt={track.trackName}
-                        className="w-10 h-10"
+                        className="w-10 h-10 cursor-pointer"
+                        onClick={() =>
+                          dispatch({
+                            type: "SET_PLAYER_URIS",
+                            payload: [track.uri],
+                          })
+                        }
                       />
                       <div className="flex flex-col">
-                        <p className="text-white hover:underline cursor-pointer">
+                        <p
+                          className="text-white hover:underline cursor-pointer"
+                          onClick={() =>
+                            dispatch({
+                              type: "SET_PLAYER_URIS",
+                              payload: [track.uri],
+                            })
+                          }
+                        >
                           {track.trackName}
                         </p>
                         <div className="text-sm">
