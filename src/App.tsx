@@ -15,6 +15,10 @@ import { RelatedArtists } from "./components/RelatedArtists";
 import { AlbumDetails } from "./components/AlbumDetails";
 import { UserResponse } from "./types/ResponseTypes/UserResponse";
 import { Search } from "./components/Search";
+import {
+  getItemWithExpiry,
+  setItemWithExpiry,
+} from "./helpers/storageWithExpiry";
 
 function App() {
   const {
@@ -24,10 +28,12 @@ function App() {
 
   //setToken
   useEffect(() => {
-    const savedToken = localStorage.getItem("token");
+    const savedToken = getItemWithExpiry("token");
     if (savedToken) {
       dispatch({ type: "SET_TOKEN", payload: savedToken });
-    } else if (window.location.hash) {
+    }
+    if (window.location.hash) {
+      console.log(window.location.hash);
       const accessToken = window.location.hash.split("&")[0].split("=")[1];
       dispatch({ type: "SET_TOKEN", payload: accessToken });
       const redirectUri = import.meta.env.PROD
@@ -36,7 +42,7 @@ function App() {
       window.location.replace(redirectUri);
     }
     if (token) {
-      localStorage.setItem("token", token);
+      setItemWithExpiry("token", token, 3600000);
     }
   }, [token, dispatch]);
 
