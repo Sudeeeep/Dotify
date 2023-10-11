@@ -11,7 +11,6 @@ export const ArtistDetails = () => {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    console.log(divRef.current);
     divRef.current?.scrollTo(0, 0);
   }, [pathname]);
 
