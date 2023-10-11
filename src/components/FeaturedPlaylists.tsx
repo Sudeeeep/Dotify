@@ -2,7 +2,6 @@ import { useContext, useEffect } from "react";
 import { StateContext } from "../context/StateContext";
 import axios from "axios";
 import { FeaturedPlaylistsType } from "../context/reducer";
-import { RiPlayFill } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import { User } from "./User";
 import { FeaturedPlaylistsResponse } from "../types/ResponseTypes/FeaturedPlaylistsResponse";
@@ -31,12 +30,13 @@ export const FeaturedPlaylists = ({ home }: { home?: boolean }) => {
           const playlistDetails: FeaturedPlaylistsType = {
             message: data.message,
             playlists: data.playlists.items.map(
-              ({ id, name, description, images }) => {
+              ({ id, name, description, images, uri }) => {
                 return {
                   id,
                   name,
                   url: images[0].url,
                   description,
+                  uri,
                 };
               }
             ),
@@ -69,7 +69,7 @@ export const FeaturedPlaylists = ({ home }: { home?: boolean }) => {
               </Link>
             )}
           </div>
-          <div className="grid grid-cols-5 gap-6 mb-10">
+          <div className="grid grid-cols-4 gap-6 mb-10">
             {(home
               ? featuredPlaylist.playlists.slice(0, 8)
               : featuredPlaylist.playlists
@@ -88,15 +88,12 @@ export const FeaturedPlaylists = ({ home }: { home?: boolean }) => {
                 }}
               >
                 <div className="flex flex-col gap-4 items-center">
-                  <div className="relative">
+                  <div>
                     <img
                       src={item.url}
                       alt={item.name}
                       className="w-44 h-44 rounded-lg"
                     />
-                    <div className="absolute bottom-0 right-0 text-[black] bg-[#1ED760] p-2 m-1 rounded-full cursor-pointer hover:scale-105">
-                      <RiPlayFill className="w-8 h-8" />
-                    </div>
                   </div>
                   <div className="w-44 flex flex-col gap-1 ">
                     <p className="text-lg hover:underline">{item.name}</p>

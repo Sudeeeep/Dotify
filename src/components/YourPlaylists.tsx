@@ -1,7 +1,6 @@
 import { useContext } from "react";
 import { StateContext } from "../context/StateContext";
 import { Link } from "react-router-dom";
-import { RiPlayFill } from "react-icons/ri";
 import { User } from "./User";
 import { checkTokenExpiry } from "../helpers/checkTokenExpiry";
 
@@ -51,9 +50,6 @@ export const YourPlaylists = ({ home }: { home?: boolean }) => {
                       alt={item.name}
                       className="w-44 h-44 rounded-lg"
                     />
-                    <div className="absolute bottom-0 right-0 text-[black] bg-[#1ED760] p-2 m-1 rounded-full cursor-pointer hover:scale-105">
-                      <RiPlayFill className="w-8 h-8" />
-                    </div>
                   </div>
                   <div className="w-44 flex flex-col gap-1">
                     <p className="text-lg hover:underline">{item.name}</p>
