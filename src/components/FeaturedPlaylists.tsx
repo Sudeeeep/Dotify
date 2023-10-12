@@ -1,56 +1,68 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { StateContext } from "../context/StateContext";
-import axios from "axios";
-import { FeaturedPlaylistsType } from "../context/reducer";
 import { Link } from "react-router-dom";
 import { User } from "./User";
-import { FeaturedPlaylistsResponse } from "../types/ResponseTypes/FeaturedPlaylistsResponse";
-import { checkTokenExpiry } from "../helpers/checkTokenExpiry";
+import { useFetchFeaturedPlaylists } from "../hooks/useFetchFeaturedPlaylists";
 
 export const FeaturedPlaylists = ({ home }: { home?: boolean }) => {
-  const {
-    state: { token, user, featuredPlaylist },
-    dispatch,
-  } = useContext(StateContext);
+  const { dispatch } = useContext(StateContext);
+  const { featuredPlaylist, loading, error } = useFetchFeaturedPlaylists();
 
-  useEffect(() => {
-    checkTokenExpiry(dispatch);
-    if (user?.country) {
-      axios
-        .get(
-          `https://api.spotify.com/v1/browse/featured-playlists?country=${user?.country}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+  if (loading) {
+    return (
+      <div className={home ? "" : `col-span-3`}>
+        {!home && <User />}
+        <div
+          className={
+            home ? "" : `h-[75vh] max-h-full px-8 py-4 overflow-auto col-span-3`
           }
-        )
-        .then(({ data }: { data: FeaturedPlaylistsResponse }) => {
-          console.log(data);
-          const playlistDetails: FeaturedPlaylistsType = {
-            message: data.message,
-            playlists: data.playlists.items.map(
-              ({ id, name, description, images, uri }) => {
-                return {
-                  id,
-                  name,
-                  url: images[0].url,
-                  description,
-                  uri,
-                };
-              }
-            ),
-          };
-          console.log(playlistDetails);
-          dispatch({
-            type: "SET_FEATURED_PLAYLISTS",
-            payload: playlistDetails,
-          });
-        });
-    }
-  }, [user?.country]);
+        >
+          <div className="flex justify-between mb-4">
+            <p className="text-xl">{featuredPlaylist?.message}</p>
+            {home && <div className="cursor-pointer">Show more</div>}
+          </div>
+          <div className="grid grid-cols-4 gap-6 mb-10">
+            {new Array(8).fill("").map((_, index) => (
+              <div
+                key={index}
+                className="py-6 rounded-lg bg-[#121212] cursor-pointer"
+              >
+                <div className="flex flex-col gap-4 items-center">
+                  <div>
+                    <div className="w-44 h-44 rounded-lg bg-[#2d2d2d]" />
+                  </div>
+                  <div className="w-44 p-4 flex flex-col gap-1 bg-[#2d2d2d]"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
-  console.log(home);
+  if (error) {
+    return (
+      <div className={home ? "" : `col-span-3`}>
+        {!home && <User />}
+        <div
+          className={
+            home ? "" : `h-[75vh] max-h-full px-8 py-4 overflow-auto col-span-3`
+          }
+        >
+          <div className="flex justify-between mb-4">
+            <p className="text-xl">{featuredPlaylist?.message}</p>
+            {home && <div className="cursor-pointer">Show more</div>}
+          </div>
+          <div className="flex flex-col justify-center h-[60vh] overflow-auto rounded-lg  bg-[#121212]">
+            <p className="text-center">
+              Ooops! Something went wrong! Please try logging in again
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (featuredPlaylist) {
     return (
