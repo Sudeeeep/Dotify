@@ -1,124 +1,89 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { StateContext } from "../context/StateContext";
-import axios from "axios";
 import { AiFillPlayCircle } from "react-icons/ai";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { User } from "./User";
-import { changeDateFormat } from "../helpers/changeDateFormat";
-import { msConvert } from "../helpers/msConvert";
-import { Tracks } from "../context/reducer";
-import { PlaylistTracksResponse } from "../types/ResponseTypes/PlaylistTracksResponse";
-import { PlaylistDetailsResponse } from "../types/ResponseTypes/PlaylistDetailsResponse";
-import { checkTokenExpiry } from "../helpers/checkTokenExpiry";
+import { useFetchPlaylistDetails } from "../hooks/useFetchPlaylistDetails";
+import { useFetchPlaylistTracks } from "../hooks/useFetchPlaylistTracks";
 
 export const PlaylistDetails = () => {
-  const {
-    state: {
-      token,
-      selectedPlaylistId,
-      selectedPlaylistDetails,
-      tracks,
-      trackOffset,
-    },
-    dispatch,
-  } = useContext(StateContext);
+  const { dispatch } = useContext(StateContext);
+  const { selectedPlaylistDetails, detailsLoading, detailsError } =
+    useFetchPlaylistDetails();
+  const { tracks, trackOffset, tracksLoading, tracksError } =
+    useFetchPlaylistTracks();
 
-  const playlistId = useParams().playlistId;
+  if (detailsLoading || tracksLoading) {
+    return (
+      <div className="col-span-3 overflow-hidden">
+        <User />
+        <div className="h-[75vh] max-h-full overflow-auto">
+          {/* Playlist Header */}
+          <div className="flex gap-4 items-end m-6">
+            <div className="w-56 h-56 bg-[#121212]" />
+            <div className="w-[75%] flex flex-col gap-4">
+              <div className="p-10 bg-[#A7A7A7]"></div>
+              <div>
+                <div className="w-[75%] p-3 mb-1 bg-[#A7A7A7]"></div>
+                <div className="w-1/2 p-2 bg-[#A7A7A7]"></div>
+              </div>
+            </div>
+          </div>
 
-  // console.log(selectedPlaylistId);
+          <div className="flex flex-col p-6 text-[#858383]">
+            <div className="grid grid-cols-[1rem_1fr_1fr_8rem_6rem] gap-4 px-4 border-b">
+              <div>#</div>
+              <div>Title</div>
+              <div>Album</div>
+              <div>Date added</div>
+              <div>Duration</div>
+            </div>
+            {new Array(3).fill("").map((_, index) => (
+              <div
+                key={index}
+                className="grid grid-cols-[1rem_1fr_1fr_8rem_6rem] gap-4 p-4 hover:opacity-80 hover:bg-[#2d2d2d]"
+              >
+                <div>{index + 1}</div>
+                <div className="flex gap-4">
+                  <div className="w-10 h-10 cursor-pointer bg-[#121212]"></div>
+                  <div className="flex flex-col gap-2">
+                    <div className="bg-[#A7A7A7] p-2 w-40"></div>
+                    <div className="bg-[#A7A7A7] p-1 w-16"></div>
+                  </div>
+                </div>
+                <div>
+                  <div className="bg-[#A7A7A7] p-2 w-40"></div>
+                </div>
+                <div>
+                  <div className="bg-[#A7A7A7] p-2 w-16"></div>
+                </div>
+                <div>
+                  <div className="bg-[#A7A7A7] p-2 w-10"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
-  //fetch selected playlist details
-  useEffect(() => {
-    checkTokenExpiry(dispatch);
-
-    if (playlistId) {
-      dispatch({
-        type: "SET_SELECTED_PLAYLIST",
-        payload: `${playlistId}`,
-      });
-      dispatch({ type: "RESET_TRACKS" });
-      dispatch({ type: "SET_TRACK_OFFSET", payload: 0 });
-    }
-
-    if (selectedPlaylistId) {
-      axios
-        .get(`https://api.spotify.com/v1/playlists/${playlistId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then(({ data }: { data: PlaylistDetailsResponse }) => {
-          console.log(data);
-          const playlistDetails = {
-            name: data.name,
-            id: data.id,
-            description: data.description,
-            followers: data.followers.total,
-            url: data.images[0].url,
-            ownerName: data.owner.display_name,
-            total: data.tracks.total,
-            uri: data.uri,
-          };
-          //   console.log(playlistDetails);
-          dispatch({
-            type: "SET_SELECTED_PLAYLIST_DETAILS",
-            payload: playlistDetails,
-          });
-        });
-    }
-  }, [selectedPlaylistId, playlistId]);
-
-  //fetch the tracks in the selected playlist
-  useEffect(() => {
-    checkTokenExpiry(dispatch);
-    if (selectedPlaylistId) {
-      axios
-        .get(
-          `https://api.spotify.com/v1/playlists/${selectedPlaylistId}/tracks?offset=${trackOffset}&limit=20&fields=items`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
-        .then(({ data }: { data: PlaylistTracksResponse }) => {
-          const newData = data.items.map(({ added_at, track }) => {
-            return { added_at: added_at.toString().slice(0, 10), track };
-          });
-
-          const fetchedtracks = newData.map<Tracks>((item) => {
-            return {
-              id: item.track.id,
-              trackName: item.track.name,
-              uri: item.track.uri,
-              albumName: item.track.album.name,
-              albumId: item.track.album.id,
-              albumImage: item.track.album.images[0]?.url,
-              dateAdded: changeDateFormat(new Date(item.added_at).toString()),
-              duration: msConvert(item.track.duration_ms),
-              artists: item.track.album.artists.map(
-                ({
-                  id,
-                  name,
-                  uri,
-                }: {
-                  id: string;
-                  name: string;
-                  uri: string;
-                }) => {
-                  return { id, name, uri };
-                }
-              ),
-            };
-          });
-          // console.log(fetchedtracks);
-          dispatch({ type: "SET_TRACKS", payload: fetchedtracks });
-        });
-    }
-  }, [selectedPlaylistId, trackOffset]);
-
-  //   console.log(tracks);
-  //   console.log(trackOffset);
+  if (detailsError || tracksError) {
+    return (
+      <div className="col-span-3">
+        <User />
+        <div className="h-[75vh] max-h-full px-8 py-4 overflow-auto col-span-3">
+          <div className="mb-10">
+            <div className="flex flex-col justify-center h-[75vh] overflow-auto rounded-lg  bg-[#121212]">
+              <p className="text-center">
+                Ooops! Something went wrong! Please try logging in again
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (selectedPlaylistDetails && tracks.length !== 0) {
     return (
@@ -149,7 +114,7 @@ export const PlaylistDetails = () => {
             </div>
           </div>
 
-          <div className="bg-[]">
+          <div className="">
             {/* Play/Pause button*/}
             <div
               className="m-4 w-fit"
