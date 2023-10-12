@@ -2,12 +2,70 @@ import { useContext } from "react";
 import { StateContext } from "../context/StateContext";
 import { Link } from "react-router-dom";
 import { User } from "./User";
+import { useFetchPlaylists } from "../hooks/useFetchPlaylists";
 
 export const YourPlaylists = ({ home }: { home?: boolean }) => {
-  const {
-    state: { playlists },
-    dispatch,
-  } = useContext(StateContext);
+  const { dispatch } = useContext(StateContext);
+
+  const { playlists, loading, error } = useFetchPlaylists();
+
+  if (loading) {
+    return (
+      <div className={home ? "" : `col-span-3`}>
+        {!home && <User />}
+        <div
+          className={
+            home ? "" : `h-[75vh] max-h-full px-8 py-4 overflow-auto col-span-3`
+          }
+        >
+          <div className="flex justify-between mb-4">
+            <p className="text-xl">Your Playlists</p>
+            {home && <div className="cursor-pointer">Show more</div>}
+          </div>
+          <div className="grid grid-cols-4 gap-6 mb-10">
+            {new Array(8).fill("").map((_, index) => (
+              <div
+                key={index}
+                className="py-6 rounded-lg bg-[#121212] cursor-pointer"
+              >
+                <div className="flex flex-col gap-4 items-center">
+                  <div>
+                    <div className="w-44 h-44 rounded-lg bg-[#2d2d2d]" />
+                  </div>
+                  <div className="w-44 p-4 flex flex-col gap-1 bg-[#2d2d2d]"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={home ? "" : `col-span-3`}>
+        {!home && <User />}
+        <div
+          className={
+            home ? "" : `h-[75vh] max-h-full px-8 py-4 overflow-auto col-span-3`
+          }
+        >
+          <div className="flex justify-between mb-4">
+            <p className="text-xl">Your Playlists</p>
+            {home && <div className="cursor-pointer">Show more</div>}
+          </div>
+          <div className="mb-10">
+            <div className="flex flex-col justify-center h-[75vh] overflow-auto rounded-lg  bg-[#121212]">
+              <p className="text-center">
+                Ooops! Something went wrong! Please try logging in again
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (playlists) {
     return (
