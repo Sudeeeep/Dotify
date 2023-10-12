@@ -1,36 +1,67 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { StateContext } from "../context/StateContext";
-import axios from "axios";
 import { Link } from "react-router-dom";
 import { User } from "./User";
-import { TopArtistsResponse } from "../types/ResponseTypes/TopArtistsResponse";
-import { checkTokenExpiry } from "../helpers/checkTokenExpiry";
+import { useFetchTopArtists } from "../hooks/useFetchTopArtists";
 
 export const TopArtists = ({ home }: { home?: boolean }) => {
-  const {
-    state: { token, favouriteArtists },
-    dispatch,
-  } = useContext(StateContext);
+  const { dispatch } = useContext(StateContext);
+  const { favouriteArtists, loading, error } = useFetchTopArtists();
 
-  useEffect(() => {
-    checkTokenExpiry(dispatch);
-    axios
-      .get("https://api.spotify.com/v1/me/top/artists", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then(({ data }: { data: TopArtistsResponse }) => {
-        const artistDetails = data.items.map((item) => {
-          return {
-            artistId: item.id,
-            artistName: item.name,
-            artistImg: item.images[0].url,
-          };
-        });
-        dispatch({ type: "SET_FAVOURITE_ARTISTS", payload: artistDetails });
-      });
-  }, []);
+  if (loading) {
+    return (
+      <div className={home ? "" : `col-span-3`}>
+        {!home && <User />}
+        <div
+          className={
+            home ? "" : `h-[75vh] max-h-full px-8 py-4 overflow-auto col-span-3`
+          }
+        >
+          <div className="flex justify-between mb-4">
+            <p className="text-xl">Your Top Artists</p>
+            {home && <div className="cursor-pointer">Show more</div>}
+          </div>
+          <div className="grid grid-cols-4 gap-6">
+            {new Array(8).fill("").map((_, index) => (
+              <div key={index}>
+                <div className="flex flex-col gap-4 items-center">
+                  <div className="">
+                    <div className="w-44 h-44 rounded-full bg-[#121212] cursor-pointer" />
+                  </div>
+                  <div className="bg-[#2d2d2d] w-44 p-4"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={home ? "" : `col-span-3`}>
+        {!home && <User />}
+        <div
+          className={
+            home ? "" : `h-[75vh] max-h-full px-8 py-4 overflow-auto col-span-3`
+          }
+        >
+          <div className="flex justify-between mb-4">
+            <p className="text-xl">Your Top Artists</p>
+            {home && <div className="cursor-pointer">Show more</div>}
+          </div>
+          <div className="mb-10">
+            <div className="flex flex-col justify-center h-[75vh] overflow-auto rounded-lg  bg-[#121212]">
+              <p className="text-center">
+                Ooops! Something went wrong! Please try logging in again
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (favouriteArtists) {
     return (
