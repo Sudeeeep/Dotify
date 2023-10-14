@@ -1,86 +1,81 @@
 import { useContext, useEffect, useRef } from "react";
 import { StateContext } from "../context/StateContext";
-import { Link, useLocation, useParams } from "react-router-dom";
-import axios from "axios";
-import { msConvert } from "../helpers/msConvert";
+import { Link, useLocation } from "react-router-dom";
 import { User } from "./User";
 import { AiFillPlayCircle } from "react-icons/ai";
 import { ArtistAlbums } from "./ArtistAlbums";
-import { AlbumDetailsResponse } from "../types/ResponseTypes/AlbumDetailsResponse";
-import { checkTokenExpiry } from "../helpers/checkTokenExpiry";
+
+import { useFetchAlbumDetails } from "../hooks/useFetchAlbumDetails";
 
 export const AlbumDetails = () => {
-  const {
-    state: { token, selectedAlbumId, selectedAlbumDetails },
-    dispatch,
-  } = useContext(StateContext);
+  const { dispatch } = useContext(StateContext);
+  const { selectedAlbumDetails, loading, error } = useFetchAlbumDetails();
+
   const divRef = useRef<HTMLDivElement>(null);
-  const albumId = useParams().albumId;
   const { pathname } = useLocation();
 
   useEffect(() => {
     divRef.current?.scrollTo(0, 0);
   }, [pathname]);
 
-  useEffect(() => {
-    checkTokenExpiry(dispatch);
-    if (albumId) {
-      dispatch({
-        type: "SET_SELECTED_ALBUM",
-        payload: `${albumId}`,
-      });
-    }
+  if (loading) {
+    return (
+      <div className="col-span-3 overflow-hidden">
+        <User />
+        <div className="h-[75vh] max-h-full overflow-auto">
+          <div className="flex gap-4 items-end m-6">
+            <div className="w-56 h-56 bg-[#121212]"></div>
+            <div className="w-[75%] flex flex-col gap-4">
+              <div className="p-10 bg-[#A7A7A7]"></div>
+              <div className="w-1/2 p-2 bg-[#A7A7A7]"></div>
+            </div>
+          </div>
 
-    if (selectedAlbumId) {
-      axios
-        .get(`https://api.spotify.com/v1/albums/${selectedAlbumId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then(({ data }: { data: AlbumDetailsResponse }) => {
-          //   console.log(data);
-          const albumDetails = {
-            albumId: data.id,
-            albumName: data.name,
-            type: data.type,
-            releaseDate: data.release_date,
-            albumImg: data.images[0].url,
-            uri: data.uri,
-            total: data.tracks.total,
-            artists: data.artists.map(({ id, name, uri }) => {
-              return { id, name, uri };
-            }),
-            tracks: data.tracks.items.map((track) => {
-              return {
-                id: track.id,
-                trackName: track.name,
-                uri: track.name,
-                duration: msConvert(track.duration_ms),
-                artists: track.artists.map(({ id, name, uri }) => {
-                  return { id, name, uri };
-                }),
-              };
-            }),
-          };
-          console.log(albumDetails);
-          dispatch({
-            type: "SET_SELECTED_ALBUM_DETAILS",
-            payload: albumDetails,
-          });
-          if (albumDetails.artists[0].name != "Various Artists") {
-            dispatch({
-              type: "SET_SELECTED_ARTIST",
-              payload: albumDetails.artists[0].id,
-            });
-            dispatch({
-              type: "SET_SELECTED_ARTIST",
-              payload: albumDetails.artists[0].id,
-            });
-          }
-        });
-    }
-  }, [selectedAlbumId, albumId]);
+          <div className="flex flex-col p-6 text-[#858383]">
+            <div className="grid grid-cols-[1rem_1fr_6rem] gap-4 px-4 border-b">
+              <div>#</div>
+              <div>Title</div>
+              <div>Duration</div>
+            </div>
+            {new Array(3).fill("").map((_, index) => (
+              <div
+                key={index}
+                className="grid grid-cols-[1rem_1fr_6rem] gap-4 p-4"
+              >
+                <div>{index + 1}</div>
+                <div className="flex gap-4">
+                  <div className="flex flex-col gap-1">
+                    <div className="bg-[#A7A7A7] p-2 w-40"></div>
+                    <div className="bg-[#A7A7A7] p-1 w-16"></div>
+                  </div>
+                </div>
+                <div>
+                  <div className="bg-[#A7A7A7] p-2 w-10"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="col-span-3 overflow-hidden">
+        <User />
+        <div className="px-8 py-4 col-span-3 mb-4">
+          <div>
+            <div className="flex flex-col justify-center h-[60vh] rounded-lg bg-[#121212]">
+              <p className="text-center">
+                Ooops! Something went wrong! Please try logging in again
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (selectedAlbumDetails) {
     return (
