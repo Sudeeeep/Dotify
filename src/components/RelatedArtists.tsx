@@ -1,48 +1,58 @@
-import { useContext, useEffect } from "react";
-import { StateContext } from "../context/StateContext";
-import axios from "axios";
 import { User } from "./User";
-import { Link, useParams } from "react-router-dom";
-import { RelatedArtistsResponse } from "../types/ResponseTypes/RelatedArtistResponse";
-import { checkTokenExpiry } from "../helpers/checkTokenExpiry";
+import { Link } from "react-router-dom";
+import { useFetchRelatedArtists } from "../hooks/useFetchRelatedArtists";
 
 export const RelatedArtists = ({ artistPage }: { artistPage?: boolean }) => {
-  const {
-    state: { token, selectedArtistId, relatedArtists },
-    dispatch,
-  } = useContext(StateContext);
+  const { selectedArtistId, relatedArtists, loading, error } =
+    useFetchRelatedArtists();
 
-  const artistId = useParams().artistId;
-
-  useEffect(() => {
-    checkTokenExpiry(dispatch);
-    if (artistId) {
-      dispatch({ type: "SET_SELECTED_ARTIST", payload: artistId });
-    }
-    if (selectedArtistId) {
-      axios
-        .get(
-          `https://api.spotify.com/v1/artists/${selectedArtistId}/related-artists`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+  if (loading) {
+    return (
+      <div className={artistPage ? "mx-6 mb-10" : "col-span-3"}>
+        {!artistPage && <User />}
+        <div
+          className={
+            artistPage
+              ? ""
+              : `h-[75vh] max-h-full px-8 py-4 overflow-auto col-span-3`
           }
-        )
-        .then(({ data }: { data: RelatedArtistsResponse }) => {
-          console.log(data);
-          const artistDetails = data.artists.map((item) => {
-            return {
-              artistId: item.id,
-              artistName: item.name,
-              artistImg: item.images[0].url,
-            };
-          });
-          console.log(artistDetails);
-          dispatch({ type: "SET_RELATED_ARTISTS", payload: artistDetails });
-        });
-    }
-  }, [selectedArtistId, artistId]);
+        >
+          <div className="flex justify-between mb-4">
+            <h1 className="text-xl">Fans also like</h1>
+            {artistPage && <div>Show more</div>}
+          </div>
+          <div className="grid grid-cols-4 gap-6 mb-10">
+            {(artistPage ? new Array(4) : new Array(8))
+              .fill("")
+              .map((_, index) => (
+                <div key={index} className="py-6 rounded-lg bg-[#121212] ">
+                  <div className="flex flex-col gap-4 items-center">
+                    <div>
+                      <div className="w-44 h-44 rounded-lg bg-[#2d2d2d]" />
+                    </div>
+                    <div className="w-44 p-4 flex flex-col gap-1 bg-[#2d2d2d]"></div>
+                  </div>
+                </div>
+              ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="px-8 py-4 col-span-3 mb-4">
+        <div>
+          <div className="flex flex-col justify-center h-[30vh] rounded-lg bg-[#121212]">
+            <p className="text-center">
+              Ooops! Something went wrong! Please try logging in again
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (relatedArtists) {
     return (
@@ -59,7 +69,7 @@ export const RelatedArtists = ({ artistPage }: { artistPage?: boolean }) => {
             <h1 className="text-xl">Fans also like</h1>
             {artistPage && (
               <Link
-                to={`/artist/${artistId}/related-artists`}
+                to={`/artist/${selectedArtistId}/related-artists`}
                 className="cursor-pointer"
               >
                 Show more
