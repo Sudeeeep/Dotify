@@ -40,41 +40,40 @@ export const ArtistHeader = () => {
     );
   }
 
-  if (selectedArtistDetails) {
-    return (
-      <div>
-        <div className="flex items-center gap-10 m-6">
-          <div className="relative">
-            <img
-              src={selectedArtistDetails?.artistImg}
-              alt={selectedArtistDetails?.artistName}
-              className="w-56 h-56 rounded-full cursor-pointer"
-            />
-            <div
-              onClick={() =>
-                dispatch({
-                  type: "SET_PLAYER_URIS",
-                  payload: [selectedArtistDetails.uri],
-                })
-              }
-              className="absolute bottom-0 right-0 text-[black] bg-[#1ED760] p-2 m-1 rounded-full cursor-pointer hover:scale-105"
-            >
-              <RiPlayFill className="w-8 h-8" />
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-6">
-            <h1 className="text-6xl font-bold">
-              {selectedArtistDetails?.artistName}
-            </h1>
-
-            <ul className="list-disc flex gap-6">
-              <p>Artist</p>
-              <li>{selectedArtistDetails?.followers} likes</li>
-            </ul>
+  return (
+    <div>
+      <div className="flex items-center gap-10 m-6">
+        <div className="relative">
+          <img
+            src={selectedArtistDetails?.artistImg}
+            alt={selectedArtistDetails?.artistName}
+            className="w-56 h-56 rounded-full cursor-pointer"
+          />
+          <div
+            onClick={() =>
+              selectedArtistDetails &&
+              dispatch({
+                type: "SET_PLAYER_URIS",
+                payload: [selectedArtistDetails.uri],
+              })
+            }
+            className="absolute bottom-0 right-0 text-[black] bg-[#1ED760] p-2 m-1 rounded-full cursor-pointer hover:scale-105"
+          >
+            <RiPlayFill className="w-8 h-8" />
           </div>
         </div>
+
+        <div className="flex flex-col gap-6">
+          <h1 className="text-6xl font-bold">
+            {selectedArtistDetails?.artistName}
+          </h1>
+
+          <ul className="list-disc flex gap-6">
+            <p>Artist</p>
+            <li>{selectedArtistDetails?.followers} likes</li>
+          </ul>
+        </div>
       </div>
-    );
-  }
+    </div>
+  );
 };
