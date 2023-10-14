@@ -1,47 +1,44 @@
-import axios from "axios";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { StateContext } from "../context/StateContext";
-import { ArtistDetailsType } from "../context/reducer";
-import { useParams } from "react-router-dom";
 import { RiPlayFill } from "react-icons/ri";
-import { ArtistDetailsResponse } from "../types/ResponseTypes/ArtistDetailsResponse";
-import { checkTokenExpiry } from "../helpers/checkTokenExpiry";
+import { useFetchArtistDetails } from "../hooks/useFetchArtistDetails";
 
 export const ArtistHeader = () => {
-  const {
-    state: { token, selectedArtistDetails, selectedArtistId },
-    dispatch,
-  } = useContext(StateContext);
+  const { dispatch } = useContext(StateContext);
 
-  const artistId = useParams().artistId;
+  const { selectedArtistDetails, loading, error } = useFetchArtistDetails();
 
-  useEffect(() => {
-    checkTokenExpiry(dispatch);
-    if (artistId) {
-      dispatch({ type: "SET_SELECTED_ARTIST", payload: artistId });
-    }
-    if (selectedArtistId) {
-      axios
-        .get(`https://api.spotify.com/v1/artists/${selectedArtistId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then(({ data }: { data: ArtistDetailsResponse }) => {
-          const artistDetails: ArtistDetailsType = {
-            artistId: data.id,
-            artistName: data.name,
-            followers: data.followers.total,
-            artistImg: data.images[0].url,
-            uri: data.uri,
-          };
-          dispatch({
-            type: "SET_SELECTED_ARTIST_DETAILS",
-            payload: artistDetails,
-          });
-        });
-    }
-  }, [selectedArtistId, artistId]);
+  if (loading) {
+    return (
+      <div>
+        <div className="flex items-center gap-10 m-6">
+          <div className="relative">
+            <div className="w-56 h-56 bg-[#121212] rounded-full cursor-pointer"></div>
+          </div>
+
+          <div className="flex flex-col gap-6 w-full">
+            <div className="bg-[#A7A7A7] p-6 w-1/2"></div>
+
+            <div className="bg-[#A7A7A7] p-2 w-1/4"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="px-8 py-4 col-span-3">
+        <div>
+          <div className="flex flex-col justify-center h-[45vh] rounded-lg bg-[#121212]">
+            <p className="text-center">
+              Ooops! Something went wrong! Please try logging in again
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (selectedArtistDetails) {
     return (
