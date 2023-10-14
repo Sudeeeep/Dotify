@@ -1,57 +1,55 @@
-import axios from "axios";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { StateContext } from "../context/StateContext";
-import { msConvert } from "../helpers/msConvert";
-import { Link, useParams } from "react-router-dom";
-import { ArtistTracksResponse } from "../types/ResponseTypes/ArtistTracksResponse";
-import { checkTokenExpiry } from "../helpers/checkTokenExpiry";
+import { Link } from "react-router-dom";
+import { useFetchArtistTracks } from "../hooks/useFetchArtistTracks";
 
 export const ArtistTracks = () => {
-  const {
-    state: { token, user, selectedArtistId, selectedArtistTracks },
-    dispatch,
-  } = useContext(StateContext);
+  const { dispatch } = useContext(StateContext);
 
-  const artistId = useParams().artistId;
+  const { selectedArtistTracks, loading, error } = useFetchArtistTracks();
 
-  useEffect(() => {
-    checkTokenExpiry(dispatch);
-    if (artistId) {
-      dispatch({ type: "SET_SELECTED_ARTIST", payload: artistId });
-    }
-    if (selectedArtistId && user) {
-      axios
-        .get(
-          `https://api.spotify.com/v1/artists/${selectedArtistId}/top-tracks?country=${user.country}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
-        .then(({ data }: { data: ArtistTracksResponse }) => {
-          const artistTracks = data.tracks.map((item) => {
-            return {
-              id: item.id,
-              trackName: item.name,
-              uri: item.uri,
-              albumId: item.album.id,
-              albumName: item.album.name,
-              albumImage: item.album.images[0]?.url,
-              duration: msConvert(item.duration_ms),
-            };
-          });
+  if (loading) {
+    return (
+      <div className="mx-6 my-10">
+        <div>
+          {new Array(4).fill("").map((_, index) => (
+            <div
+              key={index}
+              className="grid grid-cols-[1rem_1fr_1fr_8rem] gap-4 p-4 hover:opacity-80 hover:bg-[#2d2d2d]"
+            >
+              <div>{index + 1}</div>
+              <div className="flex gap-4">
+                <div className="w-10 h-10 bg-[#121212] cursor-pointer"></div>
+                <div>
+                  <p className="bg-[#A7A7A7] p-2 w-48"></p>
+                </div>
+              </div>
+              <div>
+                <p className="bg-[#A7A7A7] p-2 w-48"></p>
+              </div>
+              <div>
+                <div className="bg-[#A7A7A7] p-2 w-10"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
-          console.log(artistTracks);
-          dispatch({
-            type: "SET_ARTIST_TRACKS",
-            payload: artistTracks,
-          });
-        });
-    }
-  }, [selectedArtistId, artistId, user]);
-
-  console.log(selectedArtistTracks);
+  if (error) {
+    return (
+      <div className="px-8 py-4 col-span-3">
+        <div>
+          <div className="flex flex-col justify-center h-[45vh] rounded-lg bg-[#121212]">
+            <p className="text-center">
+              Ooops! Something went wrong! Please try logging in again
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-6 my-10">
