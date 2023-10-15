@@ -71,7 +71,7 @@ export const Playlists = () => {
                 }}
               >
                 <img src={url} alt={name} className="w-10 h-10" />
-                <p>{name}</p>
+                <p className="line-clamp-2">{name}</p>
               </div>
             </Link>
           ))}
