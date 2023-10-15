@@ -1,47 +1,58 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { StateContext } from "../context/StateContext";
-import axios from "axios";
-import { SearchedPlaylistsResponse } from "../types/ResponseTypes/SearchedPlaylistsResponse";
 import { Link } from "react-router-dom";
-import { checkTokenExpiry } from "../helpers/checkTokenExpiry";
+import { useFetchSearchedPlaylists } from "../hooks/useFetchSearchedPlaylists";
 
 export const SearchedPlaylists = () => {
-  const {
-    state: { token, searchTerm, searchedPlaylists },
-    dispatch,
-  } = useContext(StateContext);
+  const { dispatch } = useContext(StateContext);
 
-  useEffect(() => {
-    checkTokenExpiry(dispatch);
-    axios
-      .get(`https://api.spotify.com/v1/search?q=${searchTerm}&type=playlist`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then(({ data }: { data: SearchedPlaylistsResponse }) => {
-        console.log(data);
-        const playlists = data.playlists.items.map((item) => {
-          return {
-            id: item.id,
-            name: item.name,
-            url: item.images[0].url,
-            description: item.description,
-            uri: item.uri,
-          };
-        });
-        dispatch({ type: "SET_SEARCHED_PLAYLISTS", payload: playlists });
-      });
-  }, [searchTerm]);
+  const { searchedPlaylists, loading, error } = useFetchSearchedPlaylists();
 
-  console.log(searchedPlaylists);
-
-  if (searchedPlaylists) {
+  if (loading) {
     return (
       <div>
-        <h1>Playlists</h1>
+        <h1 className="text-xl mb-4">Playlists</h1>
         <div className="grid grid-cols-5 gap-6 mb-10">
-          {searchedPlaylists.slice(0, 5).map((item, index) => (
+          {new Array(5).fill("").map((_, index) => (
+            <div key={index} className="py-6 rounded-lg bg-[#121212]">
+              <div className="flex flex-col gap-4 items-center">
+                <div className="w-36 h-36 bg-[#2d2d2d] rounded-lg"></div>
+
+                <div className="w-44 flex flex-col gap-2 px-4">
+                  <div>
+                    <div className="p-4 bg-[#2d2d2d]"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="my-6">
+        <div className="px-6">
+          <div className="mb-10">
+            <div className="flex flex-col justify-center h-[35vh]  rounded-lg  bg-[#121212]">
+              <p className="text-center">
+                Ooops! Something went wrong! Please try logging in again
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <h1 className="text-xl mb-4">Playlists</h1>
+      <div className="grid grid-cols-5 gap-6 mb-10">
+        {searchedPlaylists &&
+          searchedPlaylists.slice(0, 5).map((item, index) => (
             <Link
               to={`/playlist/${item.id}`}
               key={index}
@@ -73,8 +84,7 @@ export const SearchedPlaylists = () => {
               </div>
             </Link>
           ))}
-        </div>
       </div>
-    );
-  }
+    </div>
+  );
 };
