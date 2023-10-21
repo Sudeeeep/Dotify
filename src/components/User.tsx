@@ -26,36 +26,55 @@ export const User = () => {
     <div className="pt-2 p-4">
       <div className="flex justify-between">
         {pathname.includes("/search") ? (
-          <div className="w-1/2 flex items-center">
-            <span className="absolute px-4 text-xl">
-              <AiOutlineSearch />
-            </span>
+          <div className="flex items-center min-w-[75%] gap-8">
+            <Link to={"/"} className="flex items-center gap-2">
+              <img
+                className="w-10 cursor-pointer"
+                src={dotifyLogo}
+                alt="dotify"
+              />
+              <h1 className="text-2xl cursor-pointer">Dotify</h1>
+            </Link>
+            <div className="min-w-[60%] flex items-center">
+              <span className="absolute px-4 text-xl">
+                <AiOutlineSearch />
+              </span>
 
-            <input
-              type="text"
-              name="search"
-              placeholder="What do you want to listen to?"
-              autoComplete="off"
-              className="w-full px-12 py-3 rounded-full bg-[#242424]"
-              value={searchTerm}
-              onChange={(e) =>
-                dispatch({ type: "SET_SEARCH_TERM", payload: e.target.value })
-              }
-            />
+              <input
+                type="text"
+                name="search"
+                placeholder="What do you want to listen to?"
+                autoComplete="off"
+                className="w-full px-12 py-3 rounded-full bg-[#242424]"
+                value={searchTerm}
+                onChange={(e) =>
+                  dispatch({ type: "SET_SEARCH_TERM", payload: e.target.value })
+                }
+              />
+            </div>
           </div>
         ) : (
-          <Link to={"/"} className="flex items-center gap-2">
-            <img
-              className="w-10 cursor-pointer"
-              src={dotifyLogo}
-              alt="dotify"
-            />
-            <h1 className="text-2xl cursor-pointer">Dotify</h1>
-          </Link>
+          <div className="flex items-center gap-10">
+            <Link to={"/"} className="flex items-center gap-2">
+              <img
+                className="w-10 cursor-pointer"
+                src={dotifyLogo}
+                alt="dotify"
+              />
+              <h1 className="text-2xl cursor-pointer">Dotify</h1>
+            </Link>
+
+            <Link
+              to={`/search`}
+              className="lg:invisible text-2xl font-bold bg-black rounded-full p-2 cursor-pointer"
+            >
+              <AiOutlineSearch />
+            </Link>
+          </div>
         )}
         <div>
           <button
-            className="bg-black p-3 border border-black rounded-full"
+            className="bg-black p-3 border border-black rounded-full text-r"
             onClick={() => setMenuVisible(!menuVisible)}
           >
             <RiUser3Line />

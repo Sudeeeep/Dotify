@@ -10,25 +10,29 @@ export const TopArtists = ({ home }: { home?: boolean }) => {
 
   if (loading) {
     return (
-      <div className={home ? "" : `col-span-3`}>
+      <div
+        className={
+          home ? "" : `col-start-1 row-start-1 col-span-4 lg:col-start-2`
+        }
+      >
         {!home && <User />}
         <div
           className={
             home ? "" : `h-[75vh] max-h-full px-8 py-4 overflow-auto col-span-3`
           }
         >
-          <div className="flex justify-between mb-4">
+          <div className="flex justify-between items-center mb-4">
             <p className="text-xl">Your Top Artists</p>
             {home && <div className="cursor-pointer">Show more</div>}
           </div>
-          <div className="grid grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 min-[1100px]:grid-cols-4 gap-6">
             {new Array(8).fill("").map((_, index) => (
               <div key={index}>
                 <div className="flex flex-col gap-4 items-center">
                   <div className="">
-                    <div className="w-44 h-44 rounded-full bg-[#121212] cursor-pointer" />
+                    <div className="w-28 h-28 min-[375px]:w-32 min-[375px]:h-32 min-[450px]:w-44 min-[450px]:h-44 rounded-full bg-[#121212]" />
                   </div>
-                  <div className="bg-[#2d2d2d] w-44 p-4"></div>
+                  <div className="bg-[#2d2d2d] w-28 min-[375px]:w-32 min-[450px]:w-44 p-4"></div>
                 </div>
               </div>
             ))}
@@ -40,14 +44,18 @@ export const TopArtists = ({ home }: { home?: boolean }) => {
 
   if (error) {
     return (
-      <div className={home ? "" : `col-span-3`}>
+      <div
+        className={
+          home ? "" : `col-start-1 row-start-1 col-span-4 lg:col-start-2`
+        }
+      >
         {!home && <User />}
         <div
           className={
             home ? "" : `h-[75vh] max-h-full px-8 py-4 overflow-auto col-span-3`
           }
         >
-          <div className="flex justify-between mb-4">
+          <div className="flex justify-between items-center mb-4">
             <p className="text-xl">Your Top Artists</p>
             {home && <div className="cursor-pointer">Show more</div>}
           </div>
@@ -63,25 +71,30 @@ export const TopArtists = ({ home }: { home?: boolean }) => {
     );
   }
 
-  if (favouriteArtists) {
-    return (
-      <div className={home ? "" : `col-span-3`}>
-        {!home && <User />}
-        <div
-          className={
-            home ? "" : `h-[75vh] max-h-full px-8 py-4 overflow-auto col-span-3`
-          }
-        >
-          <div className="flex justify-between mb-4">
-            <p className="text-xl">Your Top Artists</p>
-            {home && (
-              <Link to={"/top-artists"} className="cursor-pointer">
-                Show more
-              </Link>
-            )}
-          </div>
-          <div className="grid grid-cols-4 gap-6">
-            {(home ? favouriteArtists.slice(0, 8) : favouriteArtists).map(
+  return (
+    <div
+      className={
+        home ? "" : `col-start-1 row-start-1 col-span-4 lg:col-start-2`
+      }
+    >
+      {!home && <User />}
+      <div
+        className={home ? "" : `h-[75vh] max-h-full px-8 py-4 overflow-auto`}
+      >
+        <div className="flex justify-between items-center mb-4">
+          <p className="sm:text-xl">Your Top Artists</p>
+          {home && (
+            <Link
+              to={"/top-artists"}
+              className="text-sm sm:text-md cursor-pointer"
+            >
+              Show more
+            </Link>
+          )}
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 min-[1100px]:grid-cols-4 gap-6">
+          {favouriteArtists &&
+            (home ? favouriteArtists.slice(0, 8) : favouriteArtists).map(
               (item, index) => (
                 <Link
                   to={`/artist/${item.artistId}`}
@@ -98,19 +111,18 @@ export const TopArtists = ({ home }: { home?: boolean }) => {
                       <img
                         src={item.artistImg}
                         alt={item.artistName}
-                        className="w-44 h-44 rounded-full  cursor-pointer"
+                        className="w-28 h-28 min-[375px]:w-32 min-[375px]:h-32 min-[450px]:w-44 min-[450px]:h-44 rounded-full  cursor-pointer"
                       />
                     </div>
-                    <p className="text-lg text-center cursor-pointer hover:underline">
+                    <p className="text-lg text-center line-clamp-1 cursor-pointer hover:underline">
                       {item.artistName}
                     </p>
                   </div>
                 </Link>
               )
             )}
-          </div>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 };
