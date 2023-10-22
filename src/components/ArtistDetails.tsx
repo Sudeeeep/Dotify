@@ -15,7 +15,7 @@ export const ArtistDetails = () => {
   }, [pathname]);
 
   return (
-    <div className="col-span-3 overflow-hidden">
+    <div className="col-start-1 row-start-1 col-span-4 lg:col-start-2 overflow-hidden">
       <User />
       <div ref={divRef} className="h-[75vh]  overflow-auto">
         <ArtistHeader />

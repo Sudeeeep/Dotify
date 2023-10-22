@@ -15,16 +15,16 @@ export const ArtistTracks = () => {
           {new Array(4).fill("").map((_, index) => (
             <div
               key={index}
-              className="grid grid-cols-[1rem_1fr_1fr_8rem] gap-4 p-4 hover:opacity-80 hover:bg-[#2d2d2d]"
+              className="grid grid-cols-[1rem_1fr_4rem] sm:grid-cols-[1rem_1fr_1fr_4rem] gap-4 py-4 px-2 hover:opacity-80 hover:bg-[#2d2d2d]"
             >
               <div>{index + 1}</div>
               <div className="flex gap-4">
                 <div className="w-10 h-10 bg-[#121212] cursor-pointer"></div>
                 <div>
-                  <p className="bg-[#A7A7A7] p-2 w-48"></p>
+                  <p className="bg-[#A7A7A7] p-2 w-28 sm:w-48"></p>
                 </div>
               </div>
-              <div>
+              <div className="hidden sm:block">
                 <p className="bg-[#A7A7A7] p-2 w-48"></p>
               </div>
               <div>
@@ -58,7 +58,7 @@ export const ArtistTracks = () => {
         {selectedArtistTracks.map((track, index) => (
           <div
             key={index}
-            className="grid grid-cols-[1rem_1fr_1fr_8rem] gap-4 p-4 hover:opacity-80 hover:bg-[#2d2d2d]"
+            className="grid grid-cols-[1rem_1fr_4rem] sm:grid-cols-[1rem_1fr_1fr_4rem] gap-4 px-2 py-4 hover:opacity-80 hover:bg-[#2d2d2d]"
           >
             <div>{index + 1}</div>
             <div className="flex gap-4">
@@ -74,7 +74,7 @@ export const ArtistTracks = () => {
                 }
               />
               <p
-                className="hover:underline cursor-pointer"
+                className="text-sm sm:text-base hover:underline cursor-pointer line-clamp-2"
                 onClick={() =>
                   dispatch({
                     type: "SET_PLAYER_URIS",
@@ -85,14 +85,14 @@ export const ArtistTracks = () => {
                 {track.trackName}
               </p>
             </div>
-            <div>
-              <Link
-                to={`/album/${track.albumId}`}
-                className="hover:underline cursor-pointer w-fit"
-              >
-                {track.albumName}
-              </Link>
-            </div>
+
+            <Link
+              to={`/album/${track.albumId}`}
+              className="hidden sm:block hover:underline cursor-pointer line-clamp-2"
+            >
+              {track.albumName}
+            </Link>
+
             <div>{track.duration}</div>
           </div>
         ))}

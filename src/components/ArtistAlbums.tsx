@@ -18,13 +18,19 @@ export const ArtistAlbums = ({
 
   if (loading) {
     return (
-      <div className={artistPage || albumPage ? "mx-6 mb-10" : "col-span-3"}>
+      <div
+        className={
+          artistPage || albumPage
+            ? "mx-6 mb-10"
+            : "col-start-1 row-start-1 col-span-4 lg:col-start-2"
+        }
+      >
         {!artistPage && !albumPage && <User />}
         <div
           className={
             artistPage || albumPage
               ? ""
-              : `h-[75vh] max-h-full px-8 py-4 overflow-auto col-span-3`
+              : `h-[75vh] max-h-full px-8 py-4 overflow-auto`
           }
         >
           <div className="flex justify-between mb-4">
@@ -33,16 +39,16 @@ export const ArtistAlbums = ({
               <div className="cursor-pointer">Show more</div>
             )}
           </div>
-          <div className="grid grid-cols-4 gap-6 mb-10">
+          <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-6 min-[500px]:gap-8 mb-10">
             {(artistPage || albumPage ? new Array(4) : new Array(8))
               .fill("")
               .map((_, index) => (
                 <div key={index} className="py-6 rounded-lg bg-[#121212] ">
                   <div className="flex flex-col gap-4 items-center">
                     <div>
-                      <div className="w-44 h-44 rounded-lg bg-[#2d2d2d]" />
+                      <div className="w-[6rem] h-[6rem] min-[350px]:w-28 min-[350px]:h-28 min-[420px]:w-36 min-[420px]:h-36 min-[500px]:w-44 min-[500px]:h-44 rounded-lg bg-[#2d2d2d]" />
                     </div>
-                    <div className="w-44 p-4 flex flex-col gap-1 bg-[#2d2d2d]"></div>
+                    <div className="w-[6rem] min-[350px]:w-28 min-[420px]:w-36 min-[500px]:w-44 p-4 flex flex-col gap-1 bg-[#2d2d2d]"></div>
                   </div>
                 </div>
               ))}
@@ -54,7 +60,8 @@ export const ArtistAlbums = ({
 
   if (error) {
     return (
-      <div className="px-8 py-4 col-span-3">
+      <div className="px-8 py-4 col-start-1 row-start-1 col-span-4 lg:col-start-2">
+        {!artistPage && !albumPage && <User />}
         <div>
           <div className="flex flex-col justify-center h-[30vh] rounded-lg bg-[#121212]">
             <p className="text-center">
@@ -66,30 +73,36 @@ export const ArtistAlbums = ({
     );
   }
 
-  if (artistAlbums) {
-    return (
-      <div className={artistPage || albumPage ? "mx-6 mb-10" : "col-span-3"}>
-        {!artistPage && !albumPage && <User />}
-        <div
-          className={
-            artistPage || albumPage
-              ? ""
-              : `h-[75vh] max-h-full px-8 py-4 overflow-auto col-span-3`
-          }
-        >
-          <div className="flex justify-between mb-4">
-            <h1 className="text-xl">Albums</h1>
-            {(artistPage || albumPage) && (
-              <Link
-                to={`/artist/${selectedArtistId}/albums`}
-                className="cursor-pointer"
-              >
-                Show more
-              </Link>
-            )}
-          </div>
-          <div className="grid grid-cols-4 gap-8">
-            {(artistPage || albumPage
+  return (
+    <div
+      className={
+        artistPage || albumPage
+          ? "mx-6 mb-10"
+          : "col-start-1 row-start-1 col-span-4 lg:col-start-2"
+      }
+    >
+      {!artistPage && !albumPage && <User />}
+      <div
+        className={
+          artistPage || albumPage
+            ? ""
+            : `h-[75vh] max-h-full px-8 py-4 overflow-auto`
+        }
+      >
+        <div className="flex justify-between mb-4">
+          <h1 className="text-xl">Albums</h1>
+          {(artistPage || albumPage) && (
+            <Link
+              to={`/artist/${selectedArtistId}/albums`}
+              className="cursor-pointer"
+            >
+              Show more
+            </Link>
+          )}
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-6 min-[500px]:gap-8">
+          {artistAlbums &&
+            (artistPage || albumPage
               ? artistAlbums.slice(0, 4)
               : artistAlbums
             ).map((item, index) => (
@@ -108,9 +121,9 @@ export const ArtistAlbums = ({
                   <img
                     src={item.albumImg}
                     alt={item.albumName}
-                    className="w-44 h-44 rounded-lg"
+                    className="w-[6rem] min-[350px]:w-28 min-[420px]:w-36 min-[500px]:w-44 rounded-lg"
                   />
-                  <div className="w-44 flex flex-col gap-2">
+                  <div className="w-[6rem] min-[350px]:w-28 min-[500px]:w-44 flex flex-col gap-2">
                     <p className="text-lg line-clamp-1 hover:underline">
                       {item.albumName}
                     </p>
@@ -124,9 +137,8 @@ export const ArtistAlbums = ({
                 </div>
               </Link>
             ))}
-          </div>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 };
