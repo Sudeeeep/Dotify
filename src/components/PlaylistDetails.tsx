@@ -10,17 +10,16 @@ export const PlaylistDetails = () => {
   const { dispatch } = useContext(StateContext);
   const { selectedPlaylistDetails, detailsLoading, detailsError } =
     useFetchPlaylistDetails();
-  const { tracks, trackOffset, tracksLoading, tracksError } =
-    useFetchPlaylistTracks();
+  const { tracks, trackOffset, tracksError } = useFetchPlaylistTracks();
 
-  if (detailsLoading || tracksLoading) {
+  if (detailsLoading) {
     return (
-      <div className="col-span-3 overflow-hidden">
+      <div className="col-start-1 row-start-1 col-span-4 lg:col-start-2 overflow-hidden">
         <User />
         <div className="h-[75vh] max-h-full overflow-auto">
           {/* Playlist Header */}
           <div className="flex gap-4 items-end m-6">
-            <div className="w-56 h-56 bg-[#121212]" />
+            <div className="w-32 h-32 min-[450px]:w-36 min-[450px]:h-36 min-[540px]:w-44 min-[540px]:h-44 sm:w-56 sm:h-56 bg-[#121212]" />
             <div className="w-[75%] flex flex-col gap-4">
               <div className="p-10 bg-[#A7A7A7]"></div>
               <div>
@@ -31,30 +30,30 @@ export const PlaylistDetails = () => {
           </div>
 
           <div className="flex flex-col p-6 text-[#858383]">
-            <div className="grid grid-cols-[1rem_1fr_1fr_8rem_6rem] gap-4 px-4 border-b">
+            <div className="grid grid-cols-[1rem_1fr_3rem] sm:grid-cols-[1rem_1fr_1fr_6rem] min-[730px]:grid-cols-[1rem_1fr_1fr_8rem_6rem] gap-4 px-4 border-b">
               <div>#</div>
               <div>Title</div>
-              <div>Album</div>
-              <div>Date added</div>
+              <div className="hidden sm:block">Album</div>
+              <div className="hidden min-[730px]:block">Date added</div>
               <div>Duration</div>
             </div>
             {new Array(3).fill("").map((_, index) => (
               <div
                 key={index}
-                className="grid grid-cols-[1rem_1fr_1fr_8rem_6rem] gap-4 p-4 hover:opacity-80 hover:bg-[#2d2d2d]"
+                className="grid grid-cols-[1rem_1fr_3rem] sm:grid-cols-[1rem_1fr_1fr_6rem] min-[730px]:grid-cols-[1rem_1fr_1fr_8rem_6rem] gap-4 p-4 hover:opacity-80 hover:bg-[#2d2d2d]"
               >
                 <div>{index + 1}</div>
                 <div className="flex gap-4">
                   <div className="w-10 h-10 cursor-pointer bg-[#121212]"></div>
                   <div className="flex flex-col gap-2">
-                    <div className="bg-[#A7A7A7] p-2 w-40"></div>
+                    <div className="bg-[#A7A7A7] p-2 w-28 min-[400px]:w-40"></div>
                     <div className="bg-[#A7A7A7] p-1 w-16"></div>
                   </div>
                 </div>
-                <div>
-                  <div className="bg-[#A7A7A7] p-2 w-40"></div>
+                <div className="hidden sm:block">
+                  <div className="bg-[#A7A7A7] p-2 w-40 hidden sm:block"></div>
                 </div>
-                <div>
+                <div className="hidden min-[730px]:block">
                   <div className="bg-[#A7A7A7] p-2 w-16"></div>
                 </div>
                 <div>
@@ -70,7 +69,7 @@ export const PlaylistDetails = () => {
 
   if (detailsError || tracksError) {
     return (
-      <div className="col-span-3">
+      <div className="col-start-1 row-start-1 col-span-4 lg:col-start-2">
         <User />
         <div className="h-[75vh] max-h-full px-8 py-4 overflow-auto col-span-3">
           <div className="mb-10">
@@ -87,7 +86,7 @@ export const PlaylistDetails = () => {
 
   if (selectedPlaylistDetails && tracks.length !== 0) {
     return (
-      <div className="col-span-3 overflow-hidden">
+      <div className="col-start-1 row-start-1 col-span-4 lg:col-start-2 overflow-hidden">
         <User />
         <div className="h-[75vh] max-h-full overflow-auto">
           {/* Playlist Header */}
@@ -95,17 +94,17 @@ export const PlaylistDetails = () => {
             <img
               src={selectedPlaylistDetails?.url}
               alt="playlist thumbnail"
-              className="w-56 h-56"
+              className="w-32 min-[450px]:w-36 min-[540px]:w-44 sm:w-56"
             />
             <div className="flex flex-col gap-4">
-              <h1 className="text-6xl font-bold">
+              <h1 className="text-xl min-[450px]:text-3xl min-[540px]:text-4xl min-[730px]:text-6xl sm:text-5xl font-bold line-clamp-2">
                 {selectedPlaylistDetails?.name}
               </h1>
               <div>
-                <p className="text-sm mb-1 text-[#D3D4D6]">
+                <p className="text-xs min-[500px]:text-sm mb-1 text-[#D3D4D6] line-clamp-2">
                   {selectedPlaylistDetails?.description}
                 </p>
-                <ul className="list-disc flex gap-6">
+                <ul className="list-disc flex gap-6 text-[0.5rem] min-[400px]:text-xs min-[500px]:text-sm sm:text-base">
                   <p>{selectedPlaylistDetails?.ownerName}</p>
                   <li>{selectedPlaylistDetails?.followers} likes</li>
                   <li>{selectedPlaylistDetails?.total} songs</li>
@@ -130,25 +129,25 @@ export const PlaylistDetails = () => {
 
             {/* Tracks in the selected playlist*/}
             <div className="flex flex-col p-6 text-[#858383]">
-              <div className="grid grid-cols-[1rem_1fr_1fr_8rem_6rem] gap-4 px-4 border-b">
+              <div className="grid grid-cols-[1rem_1fr_3rem] sm:grid-cols-[1rem_1fr_1fr_6rem] min-[730px]:grid-cols-[1rem_1fr_1fr_8rem_6rem] gap-4 px-4 border-b">
                 <div>#</div>
                 <div>Title</div>
-                <div>Album</div>
-                <div>Date added</div>
+                <div className="hidden sm:block">Album</div>
+                <div className="hidden min-[730px]:block">Date added</div>
                 <div>Duration</div>
               </div>
               {tracks &&
                 tracks.map((track, index) => (
                   <div
                     key={index}
-                    className="grid grid-cols-[1rem_1fr_1fr_8rem_6rem] gap-4 p-4 hover:opacity-80 hover:bg-[#2d2d2d]"
+                    className="grid grid-cols-[1rem_1fr_3rem] sm:grid-cols-[1rem_1fr_1fr_6rem] min-[730px]:grid-cols-[1rem_1fr_1fr_8rem_6rem] gap-4 p-4 hover:opacity-80 hover:bg-[#2d2d2d]"
                   >
                     <div>{index + 1}</div>
                     <div className="flex gap-4">
                       <img
                         src={track.albumImage}
                         alt={track.trackName}
-                        className="w-10 h-10 cursor-pointer"
+                        className="w-8 h-8 min-[450px]:w-10 min-[450px]:h-10 cursor-pointer"
                         onClick={() =>
                           dispatch({
                             type: "SET_PLAYER_URIS",
@@ -158,7 +157,7 @@ export const PlaylistDetails = () => {
                       />
                       <div className="flex flex-col">
                         <p
-                          className="text-white hover:underline cursor-pointer"
+                          className="text-white hover:underline cursor-pointer line-clamp-2"
                           onClick={() =>
                             dispatch({
                               type: "SET_PLAYER_URIS",
@@ -168,7 +167,7 @@ export const PlaylistDetails = () => {
                         >
                           {track.trackName}
                         </p>
-                        <div className="text-sm">
+                        <div className="text-sm line-clamp-1">
                           {track.artists.length > 1
                             ? track.artists.map((artist, index) => {
                                 return index === track.artists.length - 1 ? (
@@ -203,11 +202,13 @@ export const PlaylistDetails = () => {
                     </div>
                     <Link
                       to={`/album/${track.albumId}`}
-                      className="hover:underline cursor-pointer"
+                      className="hidden sm:block hover:underline cursor-pointer line-clamp-1"
                     >
                       {track.albumName}
                     </Link>
-                    <div>{track.dateAdded}</div>
+                    <div className="hidden min-[730px]:block">
+                      {track.dateAdded}
+                    </div>
                     <div>{track.duration}</div>
                   </div>
                 ))}
