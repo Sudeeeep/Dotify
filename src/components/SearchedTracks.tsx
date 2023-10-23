@@ -16,17 +16,17 @@ export const SearchedTracks = () => {
           {new Array(6).fill("").map((_, index) => (
             <div
               key={index}
-              className="grid grid-cols-[1rem_1fr_1fr_6rem] gap-4 p-1"
+              className="grid grid-cols-[1rem_1fr_4rem] sm:grid-cols-[1rem_1fr_1fr_4rem] gap-4 p-1"
             >
               <div>{index + 1}</div>
               <div className="flex gap-3">
                 <div className="w-8 h-8 bg-[#121212]"></div>
                 <div className="flex flex-col gap-1">
-                  <div className="bg-[#A7A7A7] p-2 w-40"></div>
+                  <div className="bg-[#A7A7A7] p-2 w-28  min-[400px]:w-40"></div>
                   <div className="bg-[#A7A7A7] p-1 w-16"></div>
                 </div>
               </div>
-              <div>
+              <div className="hidden sm:block">
                 <div className="bg-[#A7A7A7] p-2 w-40"></div>
               </div>
               <div>
@@ -42,7 +42,7 @@ export const SearchedTracks = () => {
   if (error) {
     return (
       <div>
-        <div className="px-6">
+        <div>
           <div className="mb-10">
             <div className="flex flex-col justify-center h-[35vh]  rounded-lg  bg-[#121212]">
               <p className="text-center">
@@ -63,7 +63,7 @@ export const SearchedTracks = () => {
           searchedTracks.slice(0, 6).map((track, index) => (
             <div
               key={index}
-              className="grid grid-cols-[1rem_1fr_1fr_6rem] gap-4 p-1 hover:opacity-80 hover:bg-[#2d2d2d]"
+              className="grid grid-cols-[1rem_1fr_4rem] sm:grid-cols-[1rem_1fr_1fr_4rem] gap-4 p-1 hover:opacity-80 hover:bg-[#2d2d2d]"
             >
               <div>{index + 1}</div>
               <div className="flex gap-3">
@@ -80,7 +80,7 @@ export const SearchedTracks = () => {
                 />
                 <div className="flex flex-col">
                   <p
-                    className="text-white hover:underline cursor-pointer line-clamp-1"
+                    className="text-white hover:underline cursor-pointer line-clamp-2"
                     onClick={() =>
                       dispatch({
                         type: "SET_PLAYER_URIS",
@@ -125,7 +125,7 @@ export const SearchedTracks = () => {
               </div>
               <Link
                 to={`/album/${track.albumId}`}
-                className="hover:underline cursor-pointer line-clamp-1"
+                className="hidden sm:block hover:underline cursor-pointer line-clamp-1"
               >
                 {track.albumName}
               </Link>

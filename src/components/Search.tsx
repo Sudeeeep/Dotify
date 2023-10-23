@@ -12,11 +12,11 @@ export const Search = () => {
   } = useContext(StateContext);
 
   return (
-    <div className="col-span-3 overflow-hidden">
+    <div className="col-start-1 row-start-1 col-span-4 lg:col-start-2 overflow-hidden">
       <User />
       {searchTerm == "" && <Home search />}
       {searchTerm !== "" && (
-        <div className="h-[75vh] px-8 py-4 overflow-auto">
+        <div className="h-[75vh] px-6 py-4 overflow-auto">
           <SearchedTracks />
           <SearchedArtists />
           <SearchedAlbums />
