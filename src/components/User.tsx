@@ -26,7 +26,7 @@ export const User = () => {
     <div className="pt-2 p-4">
       <div className="flex justify-between">
         {pathname.includes("/search") ? (
-          <div className="flex items-center min-w-[75%] gap-8">
+          <div className="flex flex-col sm:flex-row min-w-[90%] sm:min-w-[75%] gap-8">
             <Link to={"/"} className="flex items-center gap-2">
               <img
                 className="w-10 cursor-pointer"
@@ -83,7 +83,7 @@ export const User = () => {
       </div>
 
       <div
-        className={`bg-[#121212] flex flex-col absolute right-6 z-[1]  ${
+        className={`bg-[#121212] flex flex-col absolute right-6 top-12 z-[1]  ${
           menuVisible ? "block" : "hidden"
         }`}
       >
