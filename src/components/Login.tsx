@@ -1,7 +1,11 @@
 import { Header } from "./Header";
+import {
+  generateCodeVerifier,
+  generateCodeChallenge,
+} from "../helpers/pkce";
 
 export const Login = () => {
-  function handleLogin() {
+  async function handleLogin() {
     const scope = [
       "user-read-email",
       "user-read-private",
@@ -19,13 +23,21 @@ export const Login = () => {
       ? import.meta.env.VITE_PROD_REDIRECT_URI
       : import.meta.env.VITE_DEV_REDIRECT_URI;
 
-    let url = "https://accounts.spotify.com/authorize";
-    url += "?response_type=token";
-    url += "&client_id=" + encodeURIComponent(import.meta.env.VITE_CLIENT_ID);
-    url += "&scope=" + encodeURIComponent(scope.join(" "));
-    url += "&redirect_uri=" + encodeURIComponent(redirectUri);
+    const codeVerifier = generateCodeVerifier();
+    const codeChallenge = await generateCodeChallenge(codeVerifier);
+    sessionStorage.setItem("pkce_code_verifier", codeVerifier);
 
-    window.location.href = url;
+    const params = new URLSearchParams({
+      response_type: "code",
+      client_id: import.meta.env.VITE_CLIENT_ID,
+      scope: scope.join(" "),
+      redirect_uri: redirectUri,
+      code_challenge_method: "S256",
+      code_challenge: codeChallenge,
+    });
+
+    window.location.href =
+      "https://accounts.spotify.com/authorize?" + params.toString();
   }
 
   return (

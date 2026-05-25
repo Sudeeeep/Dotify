@@ -19,6 +19,7 @@ import {
   getItemWithExpiry,
   setItemWithExpiry,
 } from "./helpers/storageWithExpiry";
+import { exchangeCodeForToken } from "./helpers/pkce";
 
 function App() {
   const {
@@ -26,43 +27,51 @@ function App() {
     dispatch,
   } = useContext(StateContext);
 
-  //setToken
+  // Handle Spotify redirect callback and restore saved token
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
+
+    if (code) {
+      const codeVerifier = sessionStorage.getItem("pkce_code_verifier");
+      if (codeVerifier) {
+        sessionStorage.removeItem("pkce_code_verifier");
+        exchangeCodeForToken(code, codeVerifier).then(
+          ({ access_token, expires_in }) => {
+            setItemWithExpiry("token", access_token, expires_in * 1000);
+            dispatch({ type: "SET_TOKEN", payload: access_token });
+            // Remove the ?code= from the URL without triggering a reload
+            window.history.replaceState({}, "", window.location.pathname);
+          }
+        );
+      }
+      return;
+    }
+
     const savedToken = getItemWithExpiry("token");
     if (savedToken) {
       dispatch({ type: "SET_TOKEN", payload: savedToken });
     }
-    if (window.location.hash) {
-      console.log(window.location.hash);
-      const accessToken = window.location.hash.split("&")[0].split("=")[1];
-      dispatch({ type: "SET_TOKEN", payload: accessToken });
-      const redirectUri = import.meta.env.PROD
-        ? import.meta.env.VITE_PROD_REDIRECT_URI
-        : import.meta.env.VITE_DEV_REDIRECT_URI;
-      window.location.replace(redirectUri);
-    }
-    if (token) {
-      setItemWithExpiry("token", token, 3600000);
+  }, [dispatch]);
 
-      //fetch user details
-      axios
-        .get(`https://api.spotify.com/v1/me`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
+  // Fetch user profile once a token is available
+  useEffect(() => {
+    if (!token) return;
+    axios
+      .get(`https://api.spotify.com/v1/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then(({ data }: { data: UserResponse }) => {
+        dispatch({
+          type: "SET_USER",
+          payload: {
+            name: data.display_name,
+            id: data.id,
+            country: data.country,
+            imageUrl: data.images[0]?.url,
           },
-        })
-        .then(({ data }: { data: UserResponse }) => {
-          dispatch({
-            type: "SET_USER",
-            payload: {
-              name: data.display_name,
-              id: data.id,
-              country: data.country,
-              imageUrl: data.images[0]?.url,
-            },
-          });
         });
-    }
+      });
   }, [token, dispatch]);
 
   // console.log(token);
