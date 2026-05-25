@@ -49,7 +49,7 @@ const router = createBrowserRouter([
         children: [
           { index: true, element: <Home /> },
           { path: "playlist/:playlistId", element: <PlaylistDetails /> },
-          { path: "featured-playlists", element: <FeaturedPlaylists /> },
+          { path: "recently-played", element: <FeaturedPlaylists /> },
           { path: "your-playlists", element: <YourPlaylists /> },
           { path: "top-artists", element: <TopArtists /> },
           { path: "artist/:artistId", element: <ArtistDetails /> },

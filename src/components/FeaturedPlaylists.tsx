@@ -86,7 +86,7 @@ export const FeaturedPlaylists = ({ home }: { home?: boolean }) => {
           <p className="sm:text-xl">{featuredPlaylist?.message}</p>
           {home && (
             <Link
-              to={"/featured-playlists"}
+              to={"/recently-played"}
               className="cursor-pointer text-sm sm:text-md"
             >
               Show more
@@ -100,16 +100,14 @@ export const FeaturedPlaylists = ({ home }: { home?: boolean }) => {
               : featuredPlaylist.playlists
             ).map((item, index) => (
               <Link
-                to={`/playlist/${item.id}`}
+                to={`/album/${item.id}`}
                 key={index}
                 className="py-4 xl:py-6 rounded-lg bg-[#121212] hover:bg-[#2d2d2d] cursor-pointer"
                 onClick={() => {
                   dispatch({
-                    type: "SET_SELECTED_PLAYLIST",
-                    payload: `${item.id}`,
+                    type: "SET_SELECTED_ALBUM",
+                    payload: item.id,
                   });
-                  dispatch({ type: "RESET_TRACKS" });
-                  dispatch({ type: "SET_TRACK_OFFSET", payload: 0 });
                 }}
               >
                 <div className="flex flex-col gap-4 items-center">

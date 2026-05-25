@@ -1,57 +1,23 @@
-export interface FeaturedPlaylistsResponse {
-  message: string;
-  playlists: Playlists;
-}
-
-interface Playlists {
-  href: string;
-  limit: number;
-  next: string;
-  offset: number;
-  previous: string;
-  total: number;
-  items: Item[];
-}
-
-interface Item {
-  collaborative: boolean;
-  description: string;
-  external_urls: ExternalUrls;
-  href: string;
+interface Album {
   id: string;
-  images: Image[];
   name: string;
-  owner: Owner;
-  public: boolean;
-  snapshot_id: string;
-  tracks: Tracks;
-  type: string;
   uri: string;
+  images: { url: string; height: number; width: number }[];
+  artists: { id: string; name: string }[];
 }
 
-interface ExternalUrls {
-  spotify: string;
+interface Track {
+  album: Album;
 }
 
-interface Image {
-  url: string;
-  height: number;
-  width: number;
+interface RecentlyPlayedItem {
+  track: Track;
+  played_at: string;
 }
 
-interface Owner {
-  external_urls: ExternalUrls;
-  followers: Followers;
+export interface FeaturedPlaylistsResponse {
+  items: RecentlyPlayedItem[];
+  next: string | null;
+  limit: number;
   href: string;
-  id: string;
-  type: string;
-  uri: string;
-  display_name: string;
 }
-
-interface Tracks {
-  href: string;
-  total: number;
-}
-
-type Followers = Tracks;
