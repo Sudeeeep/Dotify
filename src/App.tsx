@@ -2,7 +2,7 @@ import { useContext, useEffect } from "react";
 import { Login } from "./components/Login";
 import { Dotify } from "./components/Dotify";
 import { StateContext } from "./context/StateContext";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { RouterProvider, createBrowserRouter, Outlet } from "react-router-dom";
 import { PlaylistDetails } from "./components/PlaylistDetails";
 import { Home } from "./components/Home";
 import axios from "axios";
@@ -21,6 +21,51 @@ import {
 } from "./helpers/storageWithExpiry";
 import { exchangeCodeForToken } from "./helpers/pkce";
 
+const AuthenticatedApp = () => {
+  const {
+    state: { token },
+  } = useContext(StateContext);
+
+  const isExchanging = new URLSearchParams(window.location.search).has("code");
+
+  if (!token && isExchanging) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-[#A7A7A7]">Logging in...</p>
+      </div>
+    );
+  }
+
+  return token ? <Outlet /> : <Login />;
+};
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <AuthenticatedApp />,
+    children: [
+      {
+        element: <Dotify />,
+        children: [
+          { index: true, element: <Home /> },
+          { path: "playlist/:playlistId", element: <PlaylistDetails /> },
+          { path: "featured-playlists", element: <FeaturedPlaylists /> },
+          { path: "your-playlists", element: <YourPlaylists /> },
+          { path: "top-artists", element: <TopArtists /> },
+          { path: "artist/:artistId", element: <ArtistDetails /> },
+          { path: "artist/:artistId/albums", element: <ArtistAlbums /> },
+          {
+            path: "artist/:artistId/related-artists",
+            element: <RelatedArtists />,
+          },
+          { path: "album/:albumId", element: <AlbumDetails /> },
+          { path: "search", element: <Search /> },
+        ],
+      },
+    ],
+  },
+]);
+
 function App() {
   const {
     state: { token },
@@ -36,14 +81,15 @@ function App() {
       const codeVerifier = sessionStorage.getItem("pkce_code_verifier");
       if (codeVerifier) {
         sessionStorage.removeItem("pkce_code_verifier");
-        exchangeCodeForToken(code, codeVerifier).then(
-          ({ access_token, expires_in }) => {
+        exchangeCodeForToken(code, codeVerifier)
+          .then(({ access_token, expires_in }) => {
             setItemWithExpiry("token", access_token, expires_in * 1000);
             dispatch({ type: "SET_TOKEN", payload: access_token });
-            // Remove the ?code= from the URL without triggering a reload
             window.history.replaceState({}, "", window.location.pathname);
-          }
-        );
+          })
+          .catch(() => {
+            window.history.replaceState({}, "", window.location.pathname);
+          });
       }
       return;
     }
@@ -73,58 +119,6 @@ function App() {
         });
       });
   }, [token, dispatch]);
-
-  // console.log(token);
-
-  const router = createBrowserRouter([
-    {
-      path: "/",
-      element: token ? <Dotify /> : <Login />,
-      children: [
-        {
-          path: "/",
-          element: <Home />,
-        },
-        {
-          path: "/playlist/:playlistId",
-          element: <PlaylistDetails />,
-        },
-        {
-          path: "/featured-playlists",
-          element: <FeaturedPlaylists />,
-        },
-        {
-          path: "/your-playlists",
-          element: <YourPlaylists />,
-        },
-        {
-          path: "/top-artists",
-          element: <TopArtists />,
-        },
-        {
-          path: "/artist/:artistId",
-          element: <ArtistDetails />,
-        },
-
-        {
-          path: "/artist/:artistId/albums",
-          element: <ArtistAlbums />,
-        },
-        {
-          path: "/artist/:artistId/related-artists",
-          element: <RelatedArtists />,
-        },
-        {
-          path: "/album/:albumId",
-          element: <AlbumDetails />,
-        },
-        {
-          path: "/search",
-          element: <Search />,
-        },
-      ],
-    },
-  ]);
 
   return <RouterProvider router={router} />;
 }
