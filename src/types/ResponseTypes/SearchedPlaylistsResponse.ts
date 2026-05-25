@@ -4,7 +4,7 @@ export interface SearchedPlaylistsResponse {
 
 interface Playlists {
   href: string;
-  items: Item[];
+  items: (Item | null)[];
   limit: number;
   next: string;
   offset: number;

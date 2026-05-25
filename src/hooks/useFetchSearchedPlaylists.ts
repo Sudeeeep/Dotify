@@ -24,15 +24,15 @@ export const useFetchSearchedPlaylists = () => {
       })
       .then(({ data }: { data: SearchedPlaylistsResponse }) => {
         setError(false);
-        const playlists = data.playlists.items.map((item) => {
-          return {
+        const playlists = data.playlists.items
+          .filter((item) => item !== null)
+          .map((item) => ({
             id: item.id,
             name: item.name,
-            url: item.images[0].url,
+            url: item.images[0]?.url ?? "",
             description: item.description,
             uri: item.uri,
-          };
-        });
+          }));
         dispatch({ type: "SET_SEARCHED_PLAYLISTS", payload: playlists });
       })
       .catch(() => {
