@@ -43,7 +43,7 @@ To clone and run this application, you'll need [Git](https://git-scm.com) and [N
 
 ```bash
 # Clone this repository
-$ git clone https://github.com/Sudeeeep/country-quiz
+$ git clone https://github.com/Sudeeeep/Dotify
 
 # Install dependencies
 $ npm install
